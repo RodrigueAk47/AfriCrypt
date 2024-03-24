@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -10,13 +12,13 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  bool isBoy = false;
-  bool isGirl = false;
+  bool isGender = false;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
           Image.asset(
             'assets/images/welcome.png',
@@ -53,13 +55,13 @@ class _LoginViewState extends State<LoginView> {
                         child: Image.asset('assets/images/perso/boy.png', scale:7.0,),
 
                     ),
-                    Checkbox(value: isBoy, onChanged: (newbool) {
+                    Checkbox(value: !isGender, onChanged: (newbool) {
                       setState(() {
-                        isBoy=newbool!;
-                        isGirl = !newbool;
+                        isGender=!newbool!;
+                        print(isGender);
 
                       });
-                    })
+                    }, activeColor: const Color(0xffdf2546),)
                   ],
                 ),
                 // Second character
@@ -71,12 +73,12 @@ class _LoginViewState extends State<LoginView> {
                         child: Image.asset('assets/images/perso/girl.png', scale:7.0,),
 
                     ),
-                    Checkbox(value: isGirl, onChanged: (newbool) {
+                    Checkbox(value: isGender, onChanged: (newbool) {
                       setState(() {
-                        isGirl=newbool!;
-                        isBoy = !newbool;
+                        isGender=newbool!;
+                        print(isGender);
                       });
-                    })
+                    }, activeColor: const Color(0xffdf2546),)
                   ],
                 ),
 
@@ -87,28 +89,39 @@ class _LoginViewState extends State<LoginView> {
           const SizedBox(height: 20.0),
           GestureDetector(
             onTap: () {
-              print('valide');
+              insertUser('Andrew', false);
+              Future<void> displayUsers() async {
+                final users = await getAllUsers();
+
+                for (final user in users) {
+                  print('Nom : ${user['name']}');
+                  print('Sexe : ${user['gender']}');
+                }
+              }
+              displayUsers();
+
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: Container(
                 decoration: const BoxDecoration(
-                    color: Color(0xfffb335b),
+                    color: Color(0xffdf2546),
                     borderRadius: BorderRadius.all(Radius.circular(16))),
                 padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     const Text(
-                      'Valide',
+                      'Confirmer',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+
+                          fontWeight: FontWeight.w800, color: Colors.white),
                     ),
                     Align(
                       alignment: Alignment.topRight,
                       child: Container(
                         decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.black),
+                            shape: BoxShape.circle, color: Color(0xff85162a)),
                         width: 35,
                         height: 35,
                         child: const Icon(Icons.arrow_forward,
@@ -120,8 +133,35 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
           ),
+          const SizedBox(height: 20.0),
         ],
       ),
     );
   }
+
+
+  Future<void> insertUser(String name, bool gender) async {
+    final database = await openDatabase(
+      join(await getDatabasesPath(), 'database.db'),
+    );
+
+    await database.execute(
+      'INSERT INTO user(name, gender) VALUES (?, ?)',
+      [name, gender ? 1 : 0],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getAllUsers() async {
+    final database = await openDatabase(
+      join(await getDatabasesPath(), 'database.db'),
+    );
+
+    final results = await database.query('user');
+
+    return results.cast<Map<String, dynamic>>();
+  }
+
+
+
 }
+

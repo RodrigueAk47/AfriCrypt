@@ -1,24 +1,48 @@
-import 'package:africrypt/game/views/login_view.dart';
+import 'package:africrypt/core/database.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
-void main() {
-  runApp(const Game());
+import 'game/views/login_view.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = await DB().open();
+  runApp( Game(database: database));
 }
 
 class Game extends StatefulWidget {
-  const Game({super.key});
-
+  final Database database;
+  const Game({super.key, required this.database});
   @override
   State<Game> createState() => _GameState();
 }
 
 class _GameState extends State<Game> {
+  Widget _homePage = const LoginView(); // Initialement la page de connexion
+
+  Future<void> checkTableAndRedirect() async {
+    final results = await widget.database.query('user');
+
+    if (results.isNotEmpty) {
+      setState(() {
+        _homePage = const TestView();
+      });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AfriCrypt',
-      home: LoginView(),
+      home: _homePage,
     );
   }
 }
