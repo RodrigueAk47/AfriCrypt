@@ -1,19 +1,20 @@
-
+import 'package:africrypt/core/database.dart';
+import 'package:africrypt/game/views/dashboard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
+import '../components/alert.dart';
 
 class LoginView extends StatefulWidget {
-   const LoginView({super.key});
+  const LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
+  TextEditingController nameController = TextEditingController();
   bool isGender = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +24,11 @@ class _LoginViewState extends State<LoginView> {
           Image.asset(
             'assets/images/welcome.png',
           ),
-          const Padding(
+           Padding(
             padding: EdgeInsets.all(25.0),
             child: Form(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   contentPadding: EdgeInsets.only(left: 15),
                   hintText: 'Entrez votre pseudo',
                   filled: true,
@@ -38,67 +39,80 @@ class _LoginViewState extends State<LoginView> {
                         BorderSide(color: Color.fromARGB(255, 175, 181, 181)),
                   ),
                 ),
+                controller: nameController,
               ),
             ),
           ),
-           Padding(
-             padding: const EdgeInsets.only(left: 40, right: 40),
-             child: Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+          Padding(
+            padding: const EdgeInsets.only(left: 40, right: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
-
                     Container(
-                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(50)),
-                        child: Image.asset('assets/images/perso/boy.png', scale:7.0,),
-
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Image.asset(
+                        'assets/images/perso/boy.png',
+                        scale: 7.0,
+                      ),
                     ),
-                    Checkbox(value: !isGender, onChanged: (newbool) {
-                      setState(() {
-                        isGender=!newbool!;
-                        print(isGender);
+                    Checkbox(
+                      value: !isGender,
+                      onChanged: (newbool) {
+                        setState(() {
+                          isGender = !newbool!;
 
-                      });
-                    }, activeColor: const Color(0xffdf2546),)
+                        });
+                      },
+                      activeColor: const Color(0xffdf2546),
+                    )
                   ],
                 ),
                 // Second character
                 Column(
                   children: [
-
                     Container(
-                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(50)),
-                        child: Image.asset('assets/images/perso/girl.png', scale:7.0,),
-
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Image.asset(
+                        'assets/images/perso/girl.png',
+                        scale: 7.0,
+                      ),
                     ),
-                    Checkbox(value: isGender, onChanged: (newbool) {
-                      setState(() {
-                        isGender=newbool!;
-                        print(isGender);
-                      });
-                    }, activeColor: const Color(0xffdf2546),)
+                    Checkbox(
+                      value: isGender,
+                      onChanged: (newbool) {
+                        setState(() {
+                          isGender = newbool!;
+                          print(isGender);
+                        });
+                      },
+                      activeColor: const Color(0xffdf2546),
+                    )
                   ],
                 ),
-
-
               ],
-                       ),
-           ),
+            ),
+          ),
           const SizedBox(height: 20.0),
           GestureDetector(
-            onTap: () {
-              insertUser('Andrew', false);
-              Future<void> displayUsers() async {
-                final users = await getAllUsers();
-
-                for (final user in users) {
-                  print('Nom : ${user['name']}');
-                  print('Sexe : ${user['gender']}');
-                }
+            onTap: () async {
+              final enteredName = nameController.text.trim();
+              if(enteredName.isNotEmpty && enteredName.length > 2) {
+                DB().insertUser(enteredName, isGender);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Dashboard(),
+                  ),
+                );
+              } else {
+                showErrorDialog(context, 'Entrer un pseudo correct');
               }
-              displayUsers();
 
             },
             child: Padding(
@@ -114,7 +128,6 @@ class _LoginViewState extends State<LoginView> {
                     const Text(
                       'Confirmer',
                       style: TextStyle(
-
                           fontWeight: FontWeight.w800, color: Colors.white),
                     ),
                     Align(
@@ -139,29 +152,4 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-
-  Future<void> insertUser(String name, bool gender) async {
-    final database = await openDatabase(
-      join(await getDatabasesPath(), 'database.db'),
-    );
-
-    await database.execute(
-      'INSERT INTO user(name, gender) VALUES (?, ?)',
-      [name, gender ? 1 : 0],
-    );
-  }
-
-  Future<List<Map<String, dynamic>>> getAllUsers() async {
-    final database = await openDatabase(
-      join(await getDatabasesPath(), 'database.db'),
-    );
-
-    final results = await database.query('user');
-
-    return results.cast<Map<String, dynamic>>();
-  }
-
-
-
 }
-
