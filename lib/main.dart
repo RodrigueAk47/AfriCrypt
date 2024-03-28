@@ -1,8 +1,9 @@
 import 'package:africrypt/core/database.dart';
-import 'package:africrypt/game/views/dashboard.dart';
-import 'package:africrypt/game/views/login_view.dart';
+import 'package:africrypt/game/views/auth/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'game/views/dashboard_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class _GameState extends State<Game> {
   @override
   void initState() {
     super.initState();
+
     checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
   }
 

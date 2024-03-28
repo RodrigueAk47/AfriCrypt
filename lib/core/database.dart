@@ -1,6 +1,8 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../features/auth.dart';
+
 class DB {
   Future<Database> open() async {
     final database = await openDatabase(
@@ -13,19 +15,24 @@ class DB {
     return database;
   }
 
-  Future<void> insertUser(String name, bool gender) async {
+  Future<void> insertUser(User user) async {
     final database = await open();
     await database.execute(
       'INSERT INTO user(name, gender) VALUES (?, ?)',
-      [name, gender ? 1 : 0],
+      [user.username, user.gender ? 1 : 0],
     );
   }
 
-  Future<List<Map<String, dynamic>>> getAllUsers() async {
-    final database = await open();
-    final results = await database.query('user');
 
-    return results.cast<Map<String, dynamic>>();
+  Future<Map<String, dynamic>?> getFirstUser() async {
+    final db = await open();
+    final results = await db.query('user', limit: 1);
+
+    if (results.isNotEmpty) {
+      return results.first;
+    } else {
+      return null; // No user found
+    }
   }
 
   Future<void> deleteAllUsers() async {
