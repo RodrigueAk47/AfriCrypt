@@ -1,3 +1,4 @@
+import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
@@ -101,7 +102,9 @@ class SeasonCard extends StatelessWidget {
               ),
               const Text('Is this what you intended, or did youor did you '),
               const SizedBox(height: 10,),
-              ButtonOne(onButtonPressed: (){})
+              ButtonOne(onButtonPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const StoryPlay()));
+              })
             ],
           ),
         ),

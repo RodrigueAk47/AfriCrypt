@@ -1,12 +1,14 @@
 import 'package:africrypt/core/database.dart';
 import 'package:africrypt/game/views/auth/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'game/views/dashboard_view.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   final database = await DB().open();
   runApp(Game(database: database));
 }
@@ -38,7 +40,13 @@ class _GameState extends State<Game> {
     super.initState();
 
     checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
-  }
+    /* WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Démarrer le son après le premier rendu
+      AudioPlayer audioPlayer = AudioPlayer();
+      audioPlayer.setReleaseMode(ReleaseMode.loop);
+     await audioPlayer.play(AssetSource('music/theme.mp3'));
+  });*/
+    }
 
   @override
   Widget build(BuildContext context) {

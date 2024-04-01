@@ -1,8 +1,8 @@
 import 'package:africrypt/core/database.dart';
 import 'package:africrypt/features/auth.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/checkbox_component.dart';
 import 'package:flutter/material.dart';
-
 import '../../components/alert_component.dart';
 import '../../components/button_component.dart';
 import '../dashboard_view.dart';
@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           const SizedBox(height: 20.0),
           ButtonOne(onButtonPressed: () async {
-            final enteredName = nameController.text.trim();
+            final enteredName = nameController.text.trim().capitalize();
             if (enteredName.isNotEmpty && enteredName.length > 2) {
               User user = User(username: enteredName, gender: isGender);
 
@@ -89,7 +89,9 @@ class _LoginViewState extends State<LoginView> {
               showErrorDialog(context, 'Entrer un pseudo correct');
             }
           }),
-          const SizedBox(height: 20,)
+          const SizedBox(
+            height: 20,
+          )
         ],
       ),
     );
