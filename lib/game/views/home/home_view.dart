@@ -156,7 +156,7 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w900,
                         color: GameTheme.mainColor)),
               ),
-               SingleChildScrollView(
+              SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
