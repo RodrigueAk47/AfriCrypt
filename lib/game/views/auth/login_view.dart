@@ -1,5 +1,4 @@
-import 'package:africrypt/core/database.dart';
-import 'package:africrypt/features/auth.dart';
+import 'package:africrypt/Models/user_model.dart';
 import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/checkbox_component.dart';
 import 'package:flutter/material.dart';
@@ -76,9 +75,9 @@ class _LoginViewState extends State<LoginView> {
           ButtonOne(onButtonPressed: () async {
             final enteredName = nameController.text.trim().capitalize();
             if (enteredName.isNotEmpty && enteredName.length > 2) {
-              User user = User(username: enteredName, gender: isGender);
+              //User user = User(username: enteredName, gender: isGender);
 
-              DB().insertUser(user);
+              //User.insertUser(user);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

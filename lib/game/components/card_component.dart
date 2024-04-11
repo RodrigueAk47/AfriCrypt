@@ -1,3 +1,4 @@
+import 'package:africrypt/Models/episodes_model.dart';
 import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:flutter/material.dart';
 
@@ -5,18 +6,22 @@ import '../../core/theme.dart';
 import 'button_component.dart';
 
 class HomeCard extends StatelessWidget {
-  const HomeCard({super.key, required this.img, required this.numSeason, required this.title, required this.onPressCard});
+  const HomeCard(
+      {super.key,
+      required this.img,
+      required this.numSeason,
+      required this.title,
+      required this.onPressCard});
   final String img;
   final int numSeason;
   final String title;
   final void Function() onPressCard;
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: onPressCard,
       child: Container(
-        decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
         child: Card(
           elevation: 4,
           margin: const EdgeInsets.all(16),
@@ -31,7 +36,7 @@ class HomeCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: 360,
                   )),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
@@ -56,42 +61,49 @@ class HomeCard extends StatelessWidget {
 }
 
 class SeasonCard extends StatelessWidget {
-  const SeasonCard({super.key});
+  const SeasonCard(
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.description, required this.episode,});
+
+  final int id;
+  final String title;
+  final String description;
+  final Episode episode;
 
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    return Card(
       elevation: 4,
       margin: const EdgeInsets.all(19),
       child: Container(
-        decoration:
-        BoxDecoration(borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
         width: MediaQuery.of(context).size.width,
-
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(
-                    Icons.play_arrow, color: GameTheme.mainColor,
+                  const Icon(
+                    Icons.play_arrow,
+                    color: GameTheme.mainColor,
                     size: 45,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Episode 1',
-                          style: TextStyle(
+                      Text('Episode $id',
+                          style: const TextStyle(
                               fontSize: 16, color: Colors.black54)),
                       Text(
-                        'Progue de la cote d\'ivoire',
-                        style: TextStyle(
+                        title,
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                         ),
@@ -100,10 +112,17 @@ class SeasonCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const Text('Is this what you intended, or did youor did you '),
-              const SizedBox(height: 10,),
-              ButtonOne(onButtonPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const StoryPlay()));
+              Text(description),
+              const SizedBox(
+                height: 10,
+              ),
+              ButtonOne(onButtonPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StoryPlay(
+                              episode: episode,
+                            )));
               })
             ],
           ),

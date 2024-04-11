@@ -1,4 +1,5 @@
-import 'package:africrypt/core/database.dart';
+import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/Models/user_model.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<Map<String, dynamic>?> user = DB().getFirstUser();
+  //Future<Map<String, dynamic>?> user = User.getFirstUser();
 
   @override
   Widget build(BuildContext context) {
@@ -26,54 +27,7 @@ class _HomeState extends State<Home> {
           top: 10,
           right: 0,
           left: 0,
-          child: Container(
-            margin: const EdgeInsets.only(left: 30, right: 30, top: 30),
-            child: FutureBuilder(
-              future: user,
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data != null) {
-                  final user = snapshot.data!;
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(children: [
-                          Text(
-                            'Hey ${user['name']}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                                color: GameTheme.mainColor),
-                          ),
-                          const Text(
-                            'Let\'s Play',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 29,
-                                color: GameTheme.mainColor),
-                          ),
-                        ]),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: GestureDetector(
-                            onTap: () {
-                              DB().deleteAllUsers();
-                            },
-                            child: Image.asset(
-                              'assets/images/perso/${user['gender'] == 0 ? 'boy' : 'girl'}.png',
-                              scale: 9,
-                            ),
-                          ),
-                        ),
-                      ]);
-                } else if (snapshot.hasError) {
-                  return Text("Erreur : ${snapshot.error}");
-                }
-                return const Text('Hey');
-              },
-            ),
-          ),
+          child: Container(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 120),
@@ -158,35 +112,33 @@ class _HomeState extends State<Home> {
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    HomeCard(
-                      onPressCard: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SeasonPlay(),
-                          ),
-                        );
-                      },
-                      img: 'assets/images/saison1.png',
-                      numSeason: 1,
-                      title: 'Prologue',
-                    ),
-                    HomeCard(
-                      onPressCard: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SeasonPlay(),
-                          ),
-                        );
-                      },
-                      img: 'assets/images/saison1.png',
-                      numSeason: 2,
-                      title: 'Egypte',
-                    ),
-                  ],
+                child: FutureBuilder(
+                  future: Saison.loadSaisonsFromAssets(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      final saisons = snapshot.data as List<Saison>;
+                      return Row(
+                        children: saisons
+                            .map((saison) => HomeCard(
+                                img:
+                                    "assets/images/data/saison${saison.id}.png",
+                                numSeason: saison.id,
+                                title: saison.title,
+                                onPressCard: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SeasonPlay(
+                                                saison: saison,
+                                              )));
+                                }))
+                            .toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
+                    return const CircularProgressIndicator();
+                  },
                 ),
               ),
             ],

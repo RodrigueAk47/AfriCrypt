@@ -9,10 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^2.3.2
-  path: ^1.9.0
   audioplayers: ^6.0.0
-  syncfusion_flutter_pdfviewer: ^25.1.37
+  syncfusion_flutter_pdfviewer: ^25.1.39
+  firebase_core: ^2.29.0
+  firebase_auth: ^4.19.1
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +26,5 @@ flutter:
     - assets/music/
     - assets/pdf/
     - assets/images/perso/
+    - assets/data/database.json
+    - assets/images/data/

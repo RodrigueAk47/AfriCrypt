@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1009838230573",
+    "project_id": "genuis-africrypt",
+    "storage_bucket": "genuis-africrypt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009838230573:android:a76d60141d5855f7937ca4",
+        "android_client_info": {
+          "package_name": "com.example.africrypt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC62vwauhxoW27z3RE-5n_LFHTc8qEUDT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,94 @@
+{
+    "saison": [
+        {
+            "numero": 1,
+            "titre": "Le Commencement",
+            "description": "Vivez une epope de dingue",
+            "theme": "assets/images/saison1.png",
+            "episodes": [
+                {
+                    "numero": 1,
+                    "titre": "Moussa Le Guerrier",
+                    "description": "Vivez un epope de ouf",
+                    "stories": 
+                        {
+                            "pdf": "assets/pdf/pdftest.pdf",
+                            "jeu": 
+                                {
+                                    "titre": "Qui suis je ?",
+                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
+                                    "image": "assets/images/saison1.png",
+                                    "mots": [
+                                        "G",
+                                        "E",
+                                        "N",
+                                        "I",
+                                        "E"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 2,
+                    "titre": "Moussa a l'aventure",
+                    "description": "Vivez un epope de ouf",
+                    "stories": 
+                        {
+                            "pdf": "assets/pdf/pdftest.pdf",
+                            "jeu": 
+                                {
+                                    "titre": "Qui suis je ?",
+                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
+                                    "image": "assets/images/saison1.png",
+                                    "mots": [
+                                        "G",
+                                        "E",
+                                        "N"
+                                    ]
+                                }
+                            
+                        }
+                    
+                }
+            ]
+        },
+        {
+            "numero": 2,
+            "titre": "La fin",
+            "description": "Vivez un epope de ouf",
+            "theme": "assets/images/saison1.png",
+            "episodes": [
+                {
+                    "numero": 1,
+                    "titre": "Moussa Le Guerrier",
+                    "description": "Vivez un epope de ouf",
+                    "stories": 
+                        {
+                            "pdf": "assets/pdf/pdftest.pdf",
+                            "jeu": 
+                                {
+                                    "titre": "Qui suis je ?",
+                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
+                                    "image": "assets/images/saison1.png",
+                                    "mots": [
+                                        "G",
+                                        "E",
+                                        "N",
+                                        "G",
+                                        "E",
+                                        "N",
+                                        "G",
+                                        "E"
+                                        
+                                    ]
+                                }
+                            
+                        }
+                    
+                }
+            ]
+        }
+    ]
+}
