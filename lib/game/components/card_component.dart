@@ -1,4 +1,5 @@
 import 'package:africrypt/Models/episodes_model.dart';
+import 'package:africrypt/Models/season_model.dart';
 import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:flutter/material.dart';
 
@@ -61,22 +62,33 @@ class HomeCard extends StatelessWidget {
 }
 
 class SeasonCard extends StatelessWidget {
-  const SeasonCard(
-      {super.key,
-      required this.id,
-      required this.title,
-      required this.description, required this.episode,});
+  const SeasonCard({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.season,
+    required this.episode,
+  });
 
   final int id;
   final String title;
   final String description;
+  final Season season;
   final Episode episode;
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.all(19),
+      margin: screenWidth > 600
+          ? EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.1,
+              right: MediaQuery.of(context).size.width * 0.1,
+              top: 25,
+              bottom: 20)
+          : const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
       child: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
         width: MediaQuery.of(context).size.width,
@@ -116,14 +128,19 @@ class SeasonCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              ButtonOne(onButtonPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StoryPlay(
-                              episode: episode,
-                            )));
-              })
+              ButtonOne(
+                  title: 'Start',
+                  onButtonPressed: () {
+                    true
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoryPlay(
+                                      season: season,
+                                      episode: episode,
+                                    )))
+                        : null;
+                  })
             ],
           ),
         ),

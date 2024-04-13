@@ -17,19 +17,22 @@ class TextGame extends StatelessWidget {
     return TextButton(
         onPressed: onTap,
         child: Container(
+            width: 55,
+            height: 55,
+            margin: const EdgeInsets.only(top: 15),
             decoration: BoxDecoration(
                 color: (isSelect)
                     ? GameTheme.mainColor
                     : const Color.fromARGB(255, 181, 172, 172),
                 borderRadius: BorderRadius.circular(10)),
-            padding:
-                const EdgeInsets.only(top: 10, bottom: 10, left: 25, right: 25),
-            child: Text(
-              letter,
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                  color: (isSelect) ? Colors.white : Colors.blue),
+            child: Center(
+              child: Text(
+                letter,
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    color: (isSelect) ? Colors.white : Colors.blue),
+              ),
             )));
   }
 }

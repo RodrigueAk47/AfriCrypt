@@ -1,4 +1,4 @@
-import 'package:africrypt/Models/user_model.dart';
+
 import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/checkbox_component.dart';
 import 'package:flutter/material.dart';
@@ -72,22 +72,24 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
           const SizedBox(height: 20.0),
-          ButtonOne(onButtonPressed: () async {
-            final enteredName = nameController.text.trim().capitalize();
-            if (enteredName.isNotEmpty && enteredName.length > 2) {
-              //User user = User(username: enteredName, gender: isGender);
+          ButtonOne(
+              title: 'Commencer le jeu',
+              onButtonPressed: () async {
+                final enteredName = nameController.text.trim().capitalize();
+                if (enteredName.isNotEmpty && enteredName.length > 2) {
+                  //User user = User(username: enteredName, gender: isGender);
 
-              //User.insertUser(user);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Dashboard(),
-                ),
-              );
-            } else {
-              showErrorDialog(context, 'Entrer un pseudo correct');
-            }
-          }),
+                  //User.insertUser(user);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Dashboard(),
+                    ),
+                  );
+                } else {
+                  showErrorDialog(context, 'Entrer un pseudo correct');
+                }
+              }),
           const SizedBox(
             height: 20,
           )

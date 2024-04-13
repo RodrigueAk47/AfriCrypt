@@ -1,11 +1,17 @@
 import 'package:africrypt/Models/game_model.dart';
+import 'package:africrypt/Models/season_model.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
-import 'package:africrypt/game/views/home/play/success_play.dart';
 import 'package:flutter/material.dart';
+import '../../../components/alert_component.dart';
 
 class GamePlay extends StatefulWidget {
-  const GamePlay({super.key, required this.game, required this.randletters});
+  const GamePlay(
+      {super.key,
+      required this.game,
+      required this.randletters,
+      required this.season});
+  final Season season;
   final GameModel game;
   final List<String> randletters;
 
@@ -16,52 +22,70 @@ class GamePlay extends StatefulWidget {
 class _GamePlayState extends State<GamePlay> {
   List<String> selectedWords = [];
   List<int> selectedIndices = [];
+  
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeigh = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.game.title),
       ),
       body: ListView(
         children: [
-          Card(
-            margin: const EdgeInsets.all(15),
-            elevation: 5,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 25, bottom: 25),
-                  child: Text(
-                    widget.game.enigme,
-                    style: const TextStyle(fontSize: 16),
-                  ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Card(
+                margin: screenWidth > 600
+                    ? EdgeInsets.only(
+                        left: screenWidth * 0.3,
+                        right: screenWidth * 0.3,
+                        bottom: 25)
+                    : const EdgeInsets.only(
+                        left: 20, right: 20, top: 5, bottom: 10),
+                elevation: 5,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(widget.game.enigme,
+                          style: const TextStyle(fontSize: 15)),
+                    ),
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                      child: Image(
+                        image: const AssetImage(
+                            'assets/images/saison1.png'), // Replace with your image
+                        width: constraints.maxWidth,
+                        height: screenWidth > 600
+                            ? screenHeigh * 0.5
+                            : null, // This will make the image take the full width of the Card
+                      ),
+                    ),
+                    // Rest of your children here
+                  ],
                 ),
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15)),
-                  child: Image.asset(
-                    'assets/images/saison1.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
           Container(
             margin: const EdgeInsets.only(
-              top: 25,
-              bottom: 25,
+              bottom: 10,
             ),
-            height: 65,
+            height: 55,
             color: Colors.black26,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: selectedWords
-                  .map((letter) => SelectedGame(letter: letter))
-                  .toList(),
+            child: Center(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: selectedWords
+                    .map((letter) => SelectedGame(letter: letter))
+                    .toList(),
+              ),
             ),
           ),
           Wrap(
@@ -83,7 +107,7 @@ class _GamePlayState extends State<GamePlay> {
                       selectedWords.add(word);
                     }
                   });
-                  print(selectedWords);
+                  
                 },
               );
             }).toList(),
@@ -91,16 +115,15 @@ class _GamePlayState extends State<GamePlay> {
           Container(
               margin: const EdgeInsets.only(top: 25, bottom: 25),
               child: ButtonOne(
+                title: 'Valider',
                 onButtonPressed: () {
-                  if (selectedWords.join() == widget.game.words.join()) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Success(),
-                        ));
-                  }
-                },
-              ))
+                if (selectedWords.join() == widget.game.words.join()) {
+                  setState(() {
+                    showSuccessDialog(context, 'Felicitation', widget.season);
+                  });
+                }
+                
+              }))
         ],
       ),
     );

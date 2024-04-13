@@ -11,8 +11,8 @@ dependencies:
     sdk: flutter
   audioplayers: ^6.0.0
   syncfusion_flutter_pdfviewer: ^25.1.39
+  confetti: ^0.7.0
   firebase_core: ^2.29.0
-  firebase_auth: ^4.19.1
 
 dev_dependencies:
   flutter_test:

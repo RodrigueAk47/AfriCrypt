@@ -2,11 +2,17 @@ import 'package:africrypt/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class ButtonOne extends StatelessWidget {
-  const ButtonOne({super.key, required this.onButtonPressed});
+  const ButtonOne(
+      {super.key,
+      required this.onButtonPressed,
+      required this.title,
+      this.enabled = true});
+  final String title;
+  final bool enabled;
   final void Function() onButtonPressed;
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return GestureDetector(
       onTap: onButtonPressed,
       child: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30),
@@ -18,10 +24,12 @@ class ButtonOne extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              const Text(
-                'C\'est parti !',
-                style: TextStyle(
-                    fontWeight: FontWeight.w800, color: Colors.white, fontSize: 19),
+              Text(
+                title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    fontSize: 19),
               ),
               Align(
                 alignment: Alignment.topRight,
@@ -30,7 +38,7 @@ class ButtonOne extends StatelessWidget {
                       shape: BoxShape.circle, color: Color(0xff85162a)),
                   width: 35,
                   height: 35,
-                  child: const Icon(Icons.arrow_forward,
+                  child: Icon(enabled ? Icons.arrow_forward : Icons.lock,
                       color: Colors.white, size: 20),
                 ),
               ),

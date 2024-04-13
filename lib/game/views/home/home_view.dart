@@ -1,10 +1,9 @@
 import 'package:africrypt/Models/season_model.dart';
-import 'package:africrypt/Models/user_model.dart';
+import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/theme.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -113,23 +112,23 @@ class _HomeState extends State<Home> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: FutureBuilder(
-                  future: Saison.loadSaisonsFromAssets(),
+                  future: Season.loadSaisonsFromAssets(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData && snapshot.data != null) {
-                      final saisons = snapshot.data as List<Saison>;
+                      final seasons = snapshot.data as List<Season>;
                       return Row(
-                        children: saisons
-                            .map((saison) => HomeCard(
+                        children: seasons
+                            .map((season) => HomeCard(
                                 img:
-                                    "assets/images/data/saison${saison.id}.png",
-                                numSeason: saison.id,
-                                title: saison.title,
+                                    "assets/images/data/saison${season.id}.png",
+                                numSeason: season.id,
+                                title: season.title,
                                 onPressCard: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => SeasonPlay(
-                                                saison: saison,
+                                                season: season,
                                               )));
                                 }))
                             .toList(),
