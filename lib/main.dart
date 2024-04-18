@@ -1,10 +1,13 @@
-
-import 'package:africrypt/game/views/auth/login_view.dart';
+import 'package:africrypt/game/views/auth/signin_view.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/player_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'game/views/dashboard_view.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'core/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,38 +15,47 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //final database = await User.open();
-  runApp(const Game(/*database: database*/));
+  final prefs = await SharedPreferences.getInstance();
+  int? lastUnlockedSeason = prefs.getInt('last_unlocked_season');
+  if (lastUnlockedSeason == null) {
+    await Season.saveLastUnlockedSeason(1);
+    lastUnlockedSeason = 1;
+  }
+
+  String? lastUnlockedEpisode =
+      prefs.getString('last_unlocked_episode_$lastUnlockedSeason');
+  if (lastUnlockedEpisode == null) {
+    await Episode.saveLastUnlockedEpisode(lastUnlockedSeason, 0);
+  }
+
+  runApp(const Game());
 }
 
 class Game extends StatefulWidget {
   //final Database database;
 
-  const Game({super.key, /*required this.database*/});
+  const Game({super.key});
 
   @override
   State<Game> createState() => _GameState();
 }
 
 class _GameState extends State<Game> {
-  Widget _homePage = const LoginView(); // Initialement la page de connexion
+  Widget _homePage = const SignIn(); // Initialement la page de connexion
 
-  /*Future<void> checkTableAndRedirect() async {
-    final results = await widget.database.query('user');
-
-    if (results.isNotEmpty) {
+  Future<void> checkTableAndRedirect() async {
+    if (await PlayerModel.loadFromSharedPreferences() != null) {
       setState(() {
         _homePage = const Dashboard();
       });
     }
   }
-  */
 
   @override
   void initState() {
     super.initState();
 
-   // checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
+    checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
     /*WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Démarrer le son après le premier rendu
       AudioPlayer audioPlayer = AudioPlayer();
@@ -54,10 +66,10 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'AfriCrypt',
-      home: Dashboard(),
+      home: _homePage,
     );
   }
 }

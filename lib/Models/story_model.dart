@@ -1,4 +1,4 @@
-import 'package:africrypt/Models/game_model.dart';
+import 'package:africrypt/models/game_model.dart';
 
 class Story {
   final String pdf;

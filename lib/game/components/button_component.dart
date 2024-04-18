@@ -2,13 +2,16 @@ import 'package:africrypt/core/theme.dart';
 import 'package:flutter/material.dart';
 
 class ButtonOne extends StatelessWidget {
-  const ButtonOne(
-      {super.key,
-      required this.onButtonPressed,
-      required this.title,
-      this.enabled = true});
+  const ButtonOne({
+    super.key,
+    required this.onButtonPressed,
+    required this.title,
+    this.enabled = true,
+    this.logo = Icons.arrow_forward,
+  });
   final String title;
   final bool enabled;
+  final IconData logo;
   final void Function() onButtonPressed;
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class ButtonOne extends StatelessWidget {
                       shape: BoxShape.circle, color: Color(0xff85162a)),
                   width: 35,
                   height: 35,
-                  child: Icon(enabled ? Icons.arrow_forward : Icons.lock,
+                  child: Icon(enabled ? logo : Icons.lock,
                       color: Colors.white, size: 20),
                 ),
               ),

@@ -1,5 +1,6 @@
-import 'package:africrypt/Models/episodes_model.dart';
-import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/game/components/alert_component.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,12 @@ class HomeCard extends StatelessWidget {
       required this.img,
       required this.numSeason,
       required this.title,
-      required this.onPressCard});
+      required this.onPressCard,
+      required this.enabled});
   final String img;
   final int numSeason;
   final String title;
+  final bool enabled;
   final void Function() onPressCard;
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class HomeCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'Saison $numSeason : ',
+                      'Saison $numSeason : ${enabled ? 'unlock' : 'lock'} ',
                       style: const TextStyle(fontSize: 18),
                     ),
                     Text(
@@ -69,6 +72,8 @@ class SeasonCard extends StatelessWidget {
     required this.description,
     required this.season,
     required this.episode,
+    this.enabled = false,
+    required this.length,
   });
 
   final int id;
@@ -76,6 +81,8 @@ class SeasonCard extends StatelessWidget {
   final String description;
   final Season season;
   final Episode episode;
+  final bool enabled;
+  final int length;
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +106,8 @@ class SeasonCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.play_arrow,
+                  Icon(
+                    enabled ? Icons.play_arrow : Icons.lock,
                     color: GameTheme.mainColor,
                     size: 45,
                   ),
@@ -129,17 +136,22 @@ class SeasonCard extends StatelessWidget {
                 height: 10,
               ),
               ButtonOne(
+                  enabled: enabled,
                   title: 'Start',
                   onButtonPressed: () {
-                    true
+                    enabled
                         ? Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => StoryPlay(
+                                      lenght: length,
                                       season: season,
                                       episode: episode,
                                     )))
-                        : null;
+                        : showErrorDialogAccess(
+                            context,
+                            'Veuillez terminer l\'episode precedente',
+                            'Verrouillé');
                   })
             ],
           ),

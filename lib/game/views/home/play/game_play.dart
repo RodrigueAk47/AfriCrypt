@@ -1,5 +1,6 @@
-import 'package:africrypt/Models/game_model.dart';
-import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/game_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,13 @@ class GamePlay extends StatefulWidget {
       {super.key,
       required this.game,
       required this.randletters,
-      required this.season});
+      required this.season,
+      required this.episode, required this.lenght});
   final Season season;
   final GameModel game;
+  final Episode episode;
   final List<String> randletters;
+  final int lenght;
 
   @override
   State<GamePlay> createState() => _GamePlayState();
@@ -22,7 +26,6 @@ class GamePlay extends StatefulWidget {
 class _GamePlayState extends State<GamePlay> {
   List<String> selectedWords = [];
   List<int> selectedIndices = [];
-  
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +82,11 @@ class _GamePlayState extends State<GamePlay> {
             ),
             height: 55,
             color: Colors.black26,
-            child: Center(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: selectedWords
-                    .map((letter) => SelectedGame(letter: letter))
-                    .toList(),
-              ),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: selectedWords
+                  .map((letter) => SelectedGame(letter: letter))
+                  .toList(),
             ),
           ),
           Wrap(
@@ -107,7 +108,6 @@ class _GamePlayState extends State<GamePlay> {
                       selectedWords.add(word);
                     }
                   });
-                  
                 },
               );
             }).toList(),
@@ -115,15 +115,15 @@ class _GamePlayState extends State<GamePlay> {
           Container(
               margin: const EdgeInsets.only(top: 25, bottom: 25),
               child: ButtonOne(
-                title: 'Valider',
-                onButtonPressed: () {
-                if (selectedWords.join() == widget.game.words.join()) {
-                  setState(() {
-                    showSuccessDialog(context, 'Felicitation', widget.season);
-                  });
-                }
-                
-              }))
+                  title: 'Valider',
+                  onButtonPressed: () {
+                    if (selectedWords.join() == widget.game.words.join()) {
+                      setState(() {
+                        showSuccessDialog(context, 'Felicitation',
+                            widget.season, widget.episode, widget.lenght);                                              
+                      });
+                    }
+                  }))
         ],
       ),
     );

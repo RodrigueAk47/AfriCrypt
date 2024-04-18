@@ -4,3 +4,11 @@ extension MyExtension on String {
   }
 }
 
+responsive<T>(double media, T val, T val2) {
+    if (media > 800) {
+      return val;
+    } else {
+      return val2;
+    }
+  }
+

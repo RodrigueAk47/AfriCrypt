@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/game/views/dashboard_view.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
@@ -29,7 +31,8 @@ void showErrorDialog(BuildContext context, String errorMessage) {
   );
 }
 
-showSuccessDialog(BuildContext context, String successMessage, Season season) {
+showSuccessDialog(BuildContext context, String successMessage, Season season,
+    Episode episode, int lenght) {
   ConfettiController controller =
       ConfettiController(duration: const Duration(seconds: 5));
   controller.play();
@@ -62,20 +65,88 @@ showSuccessDialog(BuildContext context, String successMessage, Season season) {
         ),
         actions: <Widget>[
           ButtonOne(
-            title: 'Suivant!  ',
-            onButtonPressed: () {
-              
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SeasonPlay(
-                    season: season,
+              title: 'Suivant!  ',
+              onButtonPressed: () async {
+                Episode.saveLastUnlockedEpisode(season.id, episode.id);
+                Episode.getLastUnlockedEpisode(season.id).then(
+                  (value) async {
+                    if (value == season.episodes.length) {
+                      if (lenght != season.id) {
+                        Season.saveLastUnlockedSeason(season.id + 1);
+                        showSeasonUnlock(
+                            context,
+                            'La suite du voyage vous attend',
+                            'Saison ${season.id + 1}');
+                      } else {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Dashboard(),
+                          ),
+                          (route) => false,
+                        );
+                      }
+                    } else {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SeasonPlay(
+                            lenght: lenght,
+                            season: season,
+                          ),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  },
+                );
+              })
+        ],
+      );
+    },
+  );
+}
+
+void showErrorDialogAccess(BuildContext context, String message, String title) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        icon: const Icon(Icons.dangerous, size: 50),
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          ButtonOne(
+              onButtonPressed: () {
+                Navigator.pop(context);
+              },
+              title: 'OK')
+        ],
+      );
+    },
+  );
+}
+
+void showSeasonUnlock(BuildContext context, String message, String title) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        icon: const Icon(Icons.lock_open, size: 50),
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          ButtonOne(
+              onButtonPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Dashboard(),
                   ),
-                ),
-                (route) => false,
-              );
-            },
-          )
+                  (route) => false,
+                );
+              },
+              title: 'On y va!')
         ],
       );
     },
