@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/player_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/button_component.dart';
@@ -68,11 +69,14 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
               title: 'Suivant!  ',
               onButtonPressed: () async {
                 Episode.saveLastUnlockedEpisode(season.id, episode.id);
+                Episode.saveLastUnlockedEpisodeOnFirebase(
+                    season.id, episode.id);
                 Episode.getLastUnlockedEpisode(season.id).then(
                   (value) async {
                     if (value == season.episodes.length) {
                       if (lenght != season.id) {
                         Season.saveLastUnlockedSeason(season.id + 1);
+                        Season.saveLastUnlockedSeasonOnFirebase(season.id + 1);
                         showSeasonUnlock(
                             context,
                             'La suite du voyage vous attend',

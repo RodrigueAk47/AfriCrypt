@@ -25,26 +25,23 @@ class _LoginViewState extends State<LoginView> {
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
-          GestureDetector(
-            onTap: () => null,
-            child: Container(
-              margin:
-                  EdgeInsets.only(top: responsive<double>(screenWidth, 25, 0)),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25),
-                ),
-                child: Image.asset(
-                  'assets/images/${responsive<String>(screenWidth, 'saison1', 'welcome')}.png',
-                  height: screenWidth > 800 ? 450 : null,
-                ),
+          Container(
+            margin:
+                EdgeInsets.only(top: responsive<double>(screenWidth, 25, 0)),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+              child: Image.asset(
+                'assets/images/${responsive<String>(screenWidth, 'saison1', 'welcome')}.png',
+                height: screenWidth > 800 ? 450 : null,
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: responsive<double>(screenWidth, 25, 0),
+                top: responsive<double>(screenWidth, 25, 7),
                 bottom: responsive<double>(screenWidth, 25, 25),
                 left: responsive<double>(screenWidth, 300, 25),
                 right: responsive<double>(screenWidth, 300, 25)),

@@ -5,11 +5,14 @@ import 'package:africrypt/features/letters_treatment_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/views/home/play/game_play.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class StoryPlay extends StatelessWidget {
-  const StoryPlay({super.key, required this.episode, required this.season, required this.lenght});
+  const StoryPlay(
+      {super.key,
+      required this.episode,
+      required this.season,
+      required this.lenght});
   final Season season;
   final Episode episode;
   final int lenght;
@@ -39,7 +42,9 @@ class StoryPlay extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(
                 left: responsive<double>(screenWidth, 200, 5),
-                right: responsive<double>(screenWidth, 200, 5)),
+                right: responsive<double>(screenWidth, 200, 5),
+                top: responsive<double>(screenWidth, 200, 5),
+                bottom: responsive<double>(screenWidth, 200, 5)),
             child: ButtonOne(
                 title: 'Jouer',
                 onButtonPressed: () {
@@ -47,7 +52,7 @@ class StoryPlay extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => GamePlay(
-                            lenght: lenght,
+                                lenght: lenght,
                                 episode: episode,
                                 season: season,
                                 game: episode.stories.game,

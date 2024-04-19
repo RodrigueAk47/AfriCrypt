@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:africrypt/models/episodes_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +22,7 @@ class Season {
     required this.episodes,
     this.isUnlocked = false,
   });
+  static final _firestore = FirebaseFirestore.instance;
 
   factory Season.fromJson(Map<String, dynamic> json) {
     var episodeList = json['episodes'] as List;
@@ -60,5 +63,35 @@ class Season {
   static Future<void> removeLastUnlockedSeason() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('last_unlocked_season');
+  }
+
+  static Future<void> saveLastUnlockedSeasonOnFirebase(
+      int lastUnlockedSeason) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await _firestore.collection('players').doc(user.uid).set({
+        'last_unlocked_season': lastUnlockedSeason,
+      }, SetOptions(merge: true));
+    }
+  }
+
+  static Future<void> restoreLastUnlockedSeason() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await _firestore.collection('players').doc(user.uid).get();
+      int? lastUnlockedSeason;
+      if (doc.exists && doc.data()!.containsKey('last_unlocked_season')) {
+        lastUnlockedSeason = doc.get('last_unlocked_season') ?? 0;
+      } else {
+        // Handle the case where the document does not exist or does not contain the field 'last_unlocked_season'.
+        // This could be setting lastUnlockedSeason to null or to a default value.
+        lastUnlockedSeason = 1; // set a default value
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      if (lastUnlockedSeason != null) {
+        await prefs.setInt('last_unlocked_season', lastUnlockedSeason);
+      }
+    }
   }
 }

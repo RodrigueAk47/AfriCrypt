@@ -56,8 +56,8 @@ class _HomeState extends State<Home> {
                         ]),
                         GestureDetector(
                           onTap: () async {
-                            await Season.removeLastUnlockedSeason();
-                            await Episode.removeLastEpisode();
+                            await Episode.deleteAll();
+                            await PlayerModel.signOut();
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           SeasonPlay(
-                                                            lenght: global,
+                                                              lenght: global,
                                                               season: season)))
                                               : showErrorDialogAccess(
                                                   context,
@@ -210,7 +210,7 @@ class _HomeState extends State<Home> {
                             .toList(),
                       );
                     } else {
-                      return CircularProgressIndicator(); // Show a loading spinner while waiting for seasons data
+                      return const CircularProgressIndicator(); // Show a loading spinner while waiting for seasons data
                     }
                   },
                 ),

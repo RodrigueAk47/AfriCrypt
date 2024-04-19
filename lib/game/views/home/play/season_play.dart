@@ -21,9 +21,9 @@ class _SeasonPlayState extends State<SeasonPlay> {
   void initState() {
     super.initState();
 
-    Episode.getLastUnlockedEpisode(widget.season.id).then((num) {
+    Episode.getLastUnlockedEpisode(widget.season.id).then((id) {
       setState(() {
-        lastUnlockedEpisodeNumber = num;
+        lastUnlockedEpisodeNumber = id;
       });
     });
   }
@@ -101,7 +101,7 @@ class _SeasonPlayState extends State<SeasonPlay> {
                         enabled: isUnlocked,
                       );
                     } else {
-                      return SizedBox
+                      return const SizedBox
                           .shrink(); // Return an empty widget if no data
                     }
                   },

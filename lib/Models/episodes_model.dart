@@ -1,4 +1,6 @@
 import 'package:africrypt/models/story_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Episode {
@@ -15,6 +17,7 @@ class Episode {
     required this.stories,
     this.isUnlocked = false,
   });
+  static final _firestore = FirebaseFirestore.instance;
 
   factory Episode.fromJson(Map<String, dynamic> json) {
     return Episode(
@@ -49,14 +52,36 @@ class Episode {
 
   static Future<int> getLastUnlockedEpisode(int seasonNumber) async {
     final prefs = await SharedPreferences.getInstance();
-    String lastUnlockedEpisode = prefs.getString('last_unlocked_episode_$seasonNumber') ?? '0-0';
+    String lastUnlockedEpisode =
+        prefs.getString('last_unlocked_episode_$seasonNumber') ?? '0-0';
     List<String> parts = lastUnlockedEpisode.split('-');
     int lastUnlockedEpisodeNumber = int.parse(parts[1]);
     return lastUnlockedEpisodeNumber;
   }
 
-  static Future<void> removeLastEpisode() async {
+  static Future<void> deleteAll() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('last_unlocked_episode');
+    prefs.clear();
+  }
+
+  static Future<void> saveLastUnlockedEpisodeOnFirebase(
+      int seasonNumber, int episodeNumber) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await _firestore.collection('players').doc(user.uid).set({
+        'last_unlocked_episode_$seasonNumber': '$seasonNumber-$episodeNumber',
+      }, SetOptions(merge: true));
+    }
+  }
+
+  static Future<void> restoreLastUnlockedEpisode() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await _firestore.collection('players').doc(user.uid).get();
+      final lastUnlockedEpisode = doc.get('last_unlocked_episode') ?? '0-0';
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('last_unlocked_episode', lastUnlockedEpisode);
+    }
   }
 }

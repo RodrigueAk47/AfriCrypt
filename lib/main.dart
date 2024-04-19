@@ -1,13 +1,17 @@
+import 'package:africrypt/game/views/auth/login_view.dart';
 import 'package:africrypt/game/views/auth/signin_view.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/player_model.dart';
 import 'package:africrypt/models/season_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'game/views/dashboard_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase_options.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +45,9 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  Widget _homePage = const SignIn(); // Initialement la page de connexion
+  Widget _homePage = defaultTargetPlatform == TargetPlatform.windows
+      ? const LoginView()
+      : const SignIn(); // Initialement la page de connexion
 
   Future<void> checkTableAndRedirect() async {
     if (await PlayerModel.loadFromSharedPreferences() != null) {
