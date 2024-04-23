@@ -9,10 +9,12 @@ class ButtonOne extends StatelessWidget {
     this.enabled = true,
     this.logo = Icons.arrow_forward,
   });
+
   final String title;
   final bool enabled;
   final IconData logo;
   final void Function() onButtonPressed;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

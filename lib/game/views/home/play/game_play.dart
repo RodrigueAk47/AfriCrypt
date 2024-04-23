@@ -1,9 +1,10 @@
+import 'package:africrypt/game/components/button_component.dart';
+import 'package:africrypt/game/components/gameplay_component.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/game_model.dart';
 import 'package:africrypt/models/season_model.dart';
-import 'package:africrypt/game/components/button_component.dart';
-import 'package:africrypt/game/components/gameplay_component.dart';
 import 'package:flutter/material.dart';
+
 import '../../../components/alert_component.dart';
 
 class GamePlay extends StatefulWidget {
@@ -12,7 +13,9 @@ class GamePlay extends StatefulWidget {
       required this.game,
       required this.randletters,
       required this.season,
-      required this.episode, required this.lenght});
+      required this.episode,
+      required this.lenght});
+
   final Season season;
   final GameModel game;
   final Episode episode;
@@ -62,8 +65,8 @@ class _GamePlayState extends State<GamePlay> {
                         bottomRight: Radius.circular(8),
                       ),
                       child: Image(
-                        image: const AssetImage(
-                            'assets/images/saison1.png'), // Replace with your image
+                        image: const AssetImage('assets/images/saison1.png'),
+                        // Replace with your image
                         width: constraints.maxWidth,
                         height: screenWidth > 600
                             ? screenHeigh * 0.5
@@ -120,7 +123,7 @@ class _GamePlayState extends State<GamePlay> {
                     if (selectedWords.join() == widget.game.words.join()) {
                       setState(() {
                         showSuccessDialog(context, 'Felicitation',
-                            widget.season, widget.episode, widget.lenght);                                              
+                            widget.season, widget.episode, widget.lenght);
                       });
                     }
                   }))

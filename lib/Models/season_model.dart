@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +21,7 @@ class Season {
     required this.episodes,
     this.isUnlocked = false,
   });
+
   static final _firestore = FirebaseFirestore.instance;
 
   factory Season.fromJson(Map<String, dynamic> json) {

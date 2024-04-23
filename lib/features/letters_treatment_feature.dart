@@ -1,7 +1,7 @@
- import 'dart:math';
+import 'dart:math';
 
-List<String> randomizewords (List<String> letters) {
-  var rng =  Random();
+List<String> randomizewords(List<String> letters) {
+  var rng = Random();
   List<String> randletters = letters; // Your JSON letters
 
   while (randletters.length < 12) {
@@ -10,4 +10,4 @@ List<String> randomizewords (List<String> letters) {
 
   randletters.shuffle();
   return randletters;
- }
+}

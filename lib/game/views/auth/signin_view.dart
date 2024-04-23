@@ -1,11 +1,12 @@
+import 'package:africrypt/Models/episodes_model.dart';
+import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/button_component.dart';
+import 'package:africrypt/game/components/text_field_component.dart';
 import 'package:africrypt/game/views/auth/login_view.dart';
+import 'package:africrypt/game/views/auth/register_view.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/models/player_model.dart';
-import 'package:africrypt/models/season_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
@@ -13,6 +14,8 @@ class SignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
@@ -30,35 +33,86 @@ class SignIn extends StatelessWidget {
               const Text('Se Connecter',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
               const SizedBox(height: 100),
-              ButtonOne(
-                onButtonPressed: () async {
-                  await PlayerModel.signInWithGoogle();
-                  if (FirebaseAuth.instance.currentUser != null) {
-                    await PlayerModel.restoreFromFirestoreToSharedPreferences();
-                    await Season.restoreLastUnlockedSeason();
-                  }
-
-                  final playerData =
-                      await PlayerModel.loadFromSharedPreferences();
-                  if (playerData != null) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Dashboard()));
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginView()));
-                  }
-                },
-                title: 'Google',
-                logo: Icons.online_prediction,
+              TextFieldGame(
+                  hintText: 'Votre addresse mail', controller: emailController),
+              const SizedBox(height: 25),
+              TextFieldGame(
+                hintText: 'Votre mot de passe',
+                controller: passwordController,
               ),
               const SizedBox(height: 25),
               ButtonOne(
+                  onButtonPressed: () async {
+                    final String email = emailController.text.trim();
+                    final String password = passwordController.text.trim();
+
+                    String? signInResult =
+                        (await PlayerModel.signInWithEmail(email, password))
+                            as String?;
+                    if (signInResult == null) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator(
+                                    backgroundColor: GameTheme.mainColor,
+                                  ),
+                                  Text(" Chargement..."),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+
+                      try {
+                        await PlayerModel
+                            .restoreFromFirestoreToSharedPreferences();
+                        await Season.restoreLastUnlockedSeason();
+                        await Episode.restoreLastUnlockedEpisodes();
+                      } catch (e) {
+                        // Handle error
+                      } finally {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Dashboard()),
+                        ); // Close the dialog
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(signInResult),
+                        action: SnackBarAction(
+                          label: 'OK',
+                          onPressed: () {},
+                        ),
+                      ));
+                    }
+                  },
+                  title: "Se connecter avec Email"),
+              const SizedBox(height: 25),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterAuth()),
+                    );
+                  },
+                  child: const Text('Pas encore de compte ?',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.purple,
+                      ))),
+              ButtonOne(
                   onButtonPressed: () {
-                    PlayerModel.signOut();
+                    PlayerModel.signOutWithEmail();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

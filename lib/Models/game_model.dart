@@ -1,5 +1,3 @@
-
-
 class GameModel {
   final String title;
   final String enigme;
@@ -15,7 +13,6 @@ class GameModel {
   factory GameModel.fromJson(Map<String, dynamic> json) {
     var motsList = json['mots'] as List;
     List<String> mots = motsList.map((i) => i.toString()).toList();
-    
 
     return GameModel(
       title: json['titre'],

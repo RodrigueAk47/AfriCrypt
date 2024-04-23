@@ -1,25 +1,18 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:google_sign_in/google_sign_in.dart';
+
 
 class PlayerModel {
   final String name;
   final bool gender;
 
   PlayerModel({required this.name, required this.gender});
+
   static final Future<SharedPreferences> _prefs =
       SharedPreferences.getInstance();
-
-  Future<void> saveToSharedPreferences() async {
-    final prefs = await _prefs;
-    String playerJson = jsonEncode({
-      'name': name,
-      'gender': gender,
-    });
-    await prefs.setString('player', playerJson);
-  }
 
   static Future<void> saveUserFirestores() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,6 +32,15 @@ class PlayerModel {
     }
   }
 
+  Future<void> saveToSharedPreferences() async {
+    final prefs = await _prefs;
+    String playerJson = jsonEncode({
+      'name': name,
+      'gender': gender,
+    });
+    await prefs.setString('player', playerJson);
+  }
+
   static Future<PlayerModel?> loadFromSharedPreferences() async {
     final prefs = await _prefs;
     String? playerJson = prefs.getString('player');
@@ -52,26 +54,53 @@ class PlayerModel {
     return null;
   }
 
+
+
   static Future<void> deletePlayerData() async {
     final prefs = await _prefs;
     await prefs.remove('player');
   }
 
-  static Future<void> signInWithGoogle() async {
-    GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-    GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(credential);
+  static Future<String?> signUpWithEmail(
+      String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return null; // return null if there's no error
+    } on FirebaseAuthException catch (e) {
+      // Handle errors
+      switch (e.code) {
+        case 'weak-password':
+          return 'The password provided is too weak.';
+        case 'email-already-in-use':
+          return 'Cette adresse email est deja utilisée.';
+        default:
+          return 'An unknown error occurred: ${e.code}';
+      }
     }
   }
 
-  static Future<void> signOut() async {
-    await GoogleSignIn().signOut();
+  static Future<String?> signInWithEmail(
+      String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return null; // return null if there's no error
+    } on FirebaseAuthException catch (e) {
+      // Handle errors
+      switch (e.code) {
+        case 'user-not-found':
+          return 'No user found for that email.';
+        case 'wrong-password':
+          return 'Wrong password provided for that user.';
+        default:
+          return 'Adresse ou mot de passe incorrect';
+      }
+    }
+  }
+
+
+  static Future<void> signOutWithEmail() async {
     await FirebaseAuth.instance.signOut();
   }
 

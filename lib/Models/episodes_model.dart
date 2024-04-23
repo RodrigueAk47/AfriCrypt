@@ -17,6 +17,7 @@ class Episode {
     required this.stories,
     this.isUnlocked = false,
   });
+
   static final _firestore = FirebaseFirestore.instance;
 
   factory Episode.fromJson(Map<String, dynamic> json) {
@@ -27,6 +28,7 @@ class Episode {
       stories: Story.fromJson(json['stories']),
     );
   }
+
   static Future<void> saveLastUnlockedEpisode(
       int seasonNumber, int episodeNumber) async {
     final prefs = await SharedPreferences.getInstance();
@@ -74,14 +76,20 @@ class Episode {
     }
   }
 
-  static Future<void> restoreLastUnlockedEpisode() async {
+  static Future<void> restoreLastUnlockedEpisodes() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final doc = await _firestore.collection('players').doc(user.uid).get();
-      final lastUnlockedEpisode = doc.get('last_unlocked_episode') ?? '0-0';
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('last_unlocked_episode', lastUnlockedEpisode);
+      if (doc.exists) {
+        final prefs = await SharedPreferences.getInstance();
+        final data = doc.data()!;
+        for (var key in data.keys) {
+          if (key.startsWith('last_unlocked_episode_')) {
+            final lastUnlockedEpisode = data[key] ?? '0-0';
+            await prefs.setString(key, lastUnlockedEpisode);
+          }
+        }
+      }
     }
   }
 }

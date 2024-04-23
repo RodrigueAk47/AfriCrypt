@@ -34,7 +34,10 @@ class _DashboardState extends State<Dashboard> {
         selectedItemColor: GameTheme.mainColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.sports_esports, size: 40,),
+            icon: Icon(
+              Icons.sports_esports,
+              size: 40,
+            ),
             label: 'Accueil',
           ),
           BottomNavigationBarItem(

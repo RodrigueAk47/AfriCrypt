@@ -1,14 +1,13 @@
 import 'dart:math';
 
-import 'package:africrypt/game/views/dashboard_view.dart';
-import 'package:africrypt/models/episodes_model.dart';
-import 'package:africrypt/models/player_model.dart';
-import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/button_component.dart';
+import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
-import 'package:flutter/material.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/material.dart';
 
 void showErrorDialog(BuildContext context, String errorMessage) {
   showDialog(
@@ -45,7 +44,8 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
         title: Center(child: Text(successMessage)),
         content: ConfettiWidget(
           confettiController: controller,
-          blastDirection: -pi / 3, // radial value - UP
+          blastDirection: -pi / 3,
+          // radial value - UP
           maxBlastForce: 60,
           minBlastForce: 1,
           emissionFrequency: 0.03,
@@ -152,6 +152,29 @@ void showSeasonUnlock(BuildContext context, String message, String title) {
               },
               title: 'On y va!')
         ],
+      );
+    },
+  );
+}
+
+void progress (BuildContext context,) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Dialog(
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                backgroundColor: GameTheme.mainColor,
+              ),
+              Text(" Chargement..."),
+            ],
+          ),
+        ),
       );
     },
   );

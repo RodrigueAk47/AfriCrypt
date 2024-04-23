@@ -1,9 +1,9 @@
-import 'package:africrypt/features/string_feature.dart';
-import 'package:africrypt/models/episodes_model.dart';
-import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/features/letters_treatment_feature.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/views/home/play/game_play.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -13,9 +13,11 @@ class StoryPlay extends StatelessWidget {
       required this.episode,
       required this.season,
       required this.lenght});
+
   final Season season;
   final Episode episode;
   final int lenght;
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -43,8 +45,8 @@ class StoryPlay extends StatelessWidget {
             margin: EdgeInsets.only(
                 left: responsive<double>(screenWidth, 200, 5),
                 right: responsive<double>(screenWidth, 200, 5),
-                top: responsive<double>(screenWidth, 200, 5),
-                bottom: responsive<double>(screenWidth, 200, 5)),
+                top: responsive<double>(screenWidth, 10, 5),
+                bottom: responsive<double>(screenWidth, 10, 5)),
             child: ButtonOne(
                 title: 'Jouer',
                 onButtonPressed: () {

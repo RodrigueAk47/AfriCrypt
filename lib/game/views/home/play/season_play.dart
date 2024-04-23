@@ -1,13 +1,14 @@
-import 'package:africrypt/models/episodes_model.dart';
-import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
+import 'package:africrypt/models/episodes_model.dart';
+import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
 
 class SeasonPlay extends StatefulWidget {
   final Season season;
   final int lenght;
+
   const SeasonPlay({super.key, required this.season, required this.lenght});
 
   @override

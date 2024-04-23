@@ -1,10 +1,10 @@
+import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/alert_component.dart';
+import 'package:africrypt/game/components/card_component.dart';
+import 'package:africrypt/game/views/home/play/season_play.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/player_model.dart';
 import 'package:africrypt/models/season_model.dart';
-import 'package:africrypt/core/theme.dart';
-import 'package:africrypt/game/components/card_component.dart';
-import 'package:africrypt/game/views/home/play/season_play.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -15,14 +15,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //Future<Map<String, dynamic>?> user = User.getFirstUser();
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/bg3.jpg'), fit: BoxFit.cover)),
+              image: AssetImage('assets/images/saison_1.png'), fit: BoxFit.cover)),
       child: Stack(children: [
         Positioned(
           top: 10,
@@ -57,7 +57,9 @@ class _HomeState extends State<Home> {
                         GestureDetector(
                           onTap: () async {
                             await Episode.deleteAll();
-                            await PlayerModel.signOut();
+
+                            await PlayerModel.signOutWithEmail();
+                            await PlayerModel.deletePlayerData();
                           },
                           child: Container(
                             decoration: BoxDecoration(

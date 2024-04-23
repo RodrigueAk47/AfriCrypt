@@ -1,7 +1,7 @@
 import 'package:africrypt/game/components/alert_component.dart';
+import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/season_model.dart';
-import 'package:africrypt/game/views/home/play/story_play.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
@@ -15,11 +15,13 @@ class HomeCard extends StatelessWidget {
       required this.title,
       required this.onPressCard,
       required this.enabled});
+
   final String img;
   final int numSeason;
   final String title;
   final bool enabled;
   final void Function() onPressCard;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,15 +33,26 @@ class HomeCard extends StatelessWidget {
           margin: const EdgeInsets.all(16),
           child: Column(
             children: [
-              ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15)),
-                  child: Image.asset(
-                    img,
-                    fit: BoxFit.cover,
-                    width: 360,
-                  )),
+              Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15)),
+                    child: Image.asset(
+                      img,
+                      fit: BoxFit.cover,
+                      width: 360,
+                    ),
+                  ),
+                  if (!enabled)
+                    const Icon(
+                      Icons.lock,
+                      color: Colors.white,
+                      size: 50, // Size of the lock icon
+                    ),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
@@ -53,6 +66,7 @@ class HomeCard extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
+
                   ],
                 ),
               )
