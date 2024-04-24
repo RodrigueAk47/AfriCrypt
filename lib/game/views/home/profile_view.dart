@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-            Text(player!.name,
+            Text('${player?.name}',
                 style:
                     const TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
             user != null
