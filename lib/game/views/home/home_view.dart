@@ -2,7 +2,6 @@ import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/game/components/alert_component.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
-import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/player_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +14,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/saison_1.png'), fit: BoxFit.cover)),
+              image: AssetImage('assets/images/saison_1.png'),
+              fit: BoxFit.cover)),
       child: Stack(children: [
         Positioned(
           top: 10,
@@ -54,21 +52,13 @@ class _HomeState extends State<Home> {
                                 color: GameTheme.mainColor),
                           ),
                         ]),
-                        GestureDetector(
-                          onTap: () async {
-                            await Episode.deleteAll();
-
-                            await PlayerModel.signOutWithEmail();
-                            await PlayerModel.deletePlayerData();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.yellow,
-                                borderRadius: BorderRadius.circular(15.0)),
-                            child: Image.asset(
-                              'assets/images/perso/${player.gender == false ? 'boy' : 'girl'}.png',
-                              scale: 9,
-                            ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: Image.asset(
+                            'assets/images/perso/${player.gender == false ? 'boy' : 'girl'}.png',
+                            scale: 9,
                           ),
                         ),
                       ]);
