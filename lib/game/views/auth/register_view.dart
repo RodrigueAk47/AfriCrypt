@@ -1,6 +1,7 @@
-import 'package:africrypt/core/theme.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/text_field_component.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/player_model.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class RegisterAuth extends StatelessWidget {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: Container(
           margin: screenWidth > 800
@@ -43,53 +45,65 @@ class RegisterAuth extends StatelessWidget {
               const SizedBox(height: 25),
               ButtonOne(
                 onButtonPressed: () async {
-                  String? email = emailController.text.trim();
-                  String? password = passwordController.text.trim();
+                  if (await isInternetConnected()) {
+                    String? email = emailController.text.trim();
+                    String? password = passwordController.text.trim();
 
-                  if (!isValidEmail(email)) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: GameTheme.mainColor,
-                      content: const Text('Email invalide.'),
-                      action: SnackBarAction(
-                        label: 'ok',
-                        onPressed: () {
-                          // Code to execute.
-                        },
-                      ),
-                    ));
-                    return;
-                  }
+                    if (!isValidEmail(email)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: globalColor,
+                        content: const Text('Email invalide.'),
+                        action: SnackBarAction(
+                          label: 'ok',
+                          onPressed: () {
+                            // Code to execute.
+                          },
+                        ),
+                      ));
+                      return;
+                    }
 
-                  if (!isValidPassword(password)) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: GameTheme.mainColor,
-                      content: const Text('Mot de passe invalide.'),
-                      action: SnackBarAction(
-                        label: 'ok',
-                        onPressed: () {
-                          // Code to execute.
-                        },
-                      ),
-                    ));
-                    return;
-                  }
+                    if (!isValidPassword(password)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: globalColor,
+                        content: const Text('Mot de passe invalide.'),
+                        action: SnackBarAction(
+                          label: 'ok',
+                          onPressed: () {
+                            // Code to execute.
+                          },
+                        ),
+                      ));
+                      return;
+                    }
 
-                  String? errorMessage =
-                      (await PlayerModel.signUpWithEmail(email, password)) as String?;
-                  if (errorMessage != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: GameTheme.mainColor,
-                      content: Text(errorMessage),
-                      action: SnackBarAction(
-                        label: 'ok',
-                        onPressed: () {
-                          // Code to execute.
-                        },
-                      ),
-                    ));
+                    String? errorMessage =
+                        (await PlayerModel.signUpWithEmail(email, password));
+                    if (errorMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: globalColor,
+                        content: Text(errorMessage),
+                        action: SnackBarAction(
+                          label: 'ok',
+                          onPressed: () {
+                            // Code to execute.
+                          },
+                        ),
+                      ));
+                    } else {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginView()));
+                    }
                   } else {
-
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginView()));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Pas de connexion Internet'),
+                      action: SnackBarAction(
+                        label: 'OK',
+                        onPressed: () {},
+                      ),
+                    ));
                   }
                 },
                 title: 'Cest bon !',

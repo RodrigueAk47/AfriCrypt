@@ -1,4 +1,5 @@
-import 'package:africrypt/core/theme.dart';
+
+import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
 
 class TextGame extends StatelessWidget {
@@ -22,7 +23,7 @@ class TextGame extends StatelessWidget {
             margin: const EdgeInsets.only(top: 15),
             decoration: BoxDecoration(
                 color: (isSelect)
-                    ? GameTheme.mainColor
+                    ? globalColor
                     : const Color.fromARGB(255, 181, 172, 172),
                 borderRadius: BorderRadius.circular(10)),
             child: Center(
@@ -38,14 +39,15 @@ class TextGame extends StatelessWidget {
 }
 
 class SelectedGame extends StatelessWidget {
-  const SelectedGame({required this.letter, super.key});
+  const SelectedGame({required this.letter, super.key, required this.onTap});
 
   final String letter;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-        onPressed: () {},
+        onPressed: onTap,
         child: Container(
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 220, 220, 220),

@@ -4,12 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class PlayerModel {
   final String name;
   final bool gender;
+  int? coins = 3;
 
-  PlayerModel({required this.name, required this.gender});
+  PlayerModel({
+    required this.name,
+    required this.gender,
+    this.coins,
+  });
 
   static final Future<SharedPreferences> _prefs =
       SharedPreferences.getInstance();
@@ -27,6 +31,7 @@ class PlayerModel {
             .set({
           'name': playerData['name'],
           'gender': playerData['gender'],
+          'coins': playerData['coins'],
         }, SetOptions(merge: true));
       }
     }
@@ -37,6 +42,7 @@ class PlayerModel {
     String playerJson = jsonEncode({
       'name': name,
       'gender': gender,
+      'coins': coins ?? 3,
     });
     await prefs.setString('player', playerJson);
   }
@@ -46,23 +52,24 @@ class PlayerModel {
     String? playerJson = prefs.getString('player');
     if (playerJson != null && playerJson != 'null') {
       Map<String, dynamic> playerData = jsonDecode(playerJson);
-      if (playerData.containsKey('name') && playerData.containsKey('gender')) {
+      if (playerData.containsKey('name') &&
+          playerData.containsKey('gender') &&
+          playerData.containsKey('coins')) {
         return PlayerModel(
-            name: playerData['name'], gender: playerData['gender']);
+            name: playerData['name'],
+            gender: playerData['gender'],
+            coins: playerData['coins']);
       }
     }
     return null;
   }
 
-
-
   static Future<void> deletePlayerData() async {
     final prefs = await _prefs;
-    await prefs.remove('player');
+    await prefs.clear();
   }
 
-  static Future<String?> signUpWithEmail(
-      String email, String password) async {
+  static Future<String?> signUpWithEmail(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -80,8 +87,7 @@ class PlayerModel {
     }
   }
 
-  static Future<String?> signInWithEmail(
-      String email, String password) async {
+  static Future<String?> signInWithEmail(String email, String password) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -99,7 +105,6 @@ class PlayerModel {
     }
   }
 
-
   static Future<void> signOutWithEmail() async {
     await FirebaseAuth.instance.signOut();
   }
@@ -116,6 +121,7 @@ class PlayerModel {
         playerData = {
           'name': doc.get('name'),
           'gender': doc.get('gender'),
+          'coins': doc.get('coins'),
         };
       } else {
         // Handle the case where the document does not exist.

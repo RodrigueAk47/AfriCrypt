@@ -1,4 +1,4 @@
-import 'package:africrypt/core/theme.dart';
+import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
 
 class ButtonOne extends StatelessWidget {
@@ -22,9 +22,9 @@ class ButtonOne extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30),
         child: Container(
-          decoration: const BoxDecoration(
-              color: GameTheme.mainColor,
-              borderRadius: BorderRadius.all(Radius.circular(16))),
+          decoration: BoxDecoration(
+              color: globalColor,
+              borderRadius: const BorderRadius.all(Radius.circular(16))),
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
           child: Stack(
             alignment: Alignment.center,
@@ -40,7 +40,7 @@ class ButtonOne extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: Container(
                   decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xff85162a)),
+                      shape: BoxShape.circle, color: Colors.white12),
                   width: 35,
                   height: 35,
                   child: Icon(enabled ? logo : Icons.lock,

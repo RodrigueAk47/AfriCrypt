@@ -1,6 +1,7 @@
-import 'package:africrypt/core/theme.dart';
+
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _SeasonPlayState extends State<SeasonPlay> {
           widget.season.title,
           style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: GameTheme.mainColor,
+        backgroundColor: globalColor,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Column(

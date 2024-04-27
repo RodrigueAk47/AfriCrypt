@@ -1,12 +1,15 @@
 import 'dart:math';
 
 import 'package:africrypt/core/theme.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:confetti/confetti.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showErrorDialog(BuildContext context, String errorMessage) {
@@ -51,16 +54,16 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
           emissionFrequency: 0.03,
           numberOfParticles: 15,
           gravity: 0.01,
-          child: const Column(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.emoji_events,
                 size: 75,
-                color: GameTheme.mainColor,
+                color: globalColor,
               ),
-              Text('Tu as terminé l\'episode'),
-              SizedBox(height: 10),
+              const Text('Tu as terminé l\'episode'),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -69,14 +72,24 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
               title: 'Suivant!  ',
               onButtonPressed: () async {
                 Episode.saveLastUnlockedEpisode(season.id, episode.id);
-                Episode.saveLastUnlockedEpisodeOnFirebase(
-                    season.id, episode.id);
+                if (await isInternetConnected() &&
+                    FirebaseAuth.instance.currentUser != null) {
+                  Episode.saveLastUnlockedEpisodeOnFirebase(
+                      season.id, episode.id);
+                }
+                
+
                 Episode.getLastUnlockedEpisode(season.id).then(
                   (value) async {
                     if (value == season.episodes.length) {
                       if (lenght != season.id) {
                         Season.saveLastUnlockedSeason(season.id + 1);
-                        Season.saveLastUnlockedSeasonOnFirebase(season.id + 1);
+                        if (await isInternetConnected() &&
+                            FirebaseAuth.instance.currentUser != null) {
+                          Season.saveLastUnlockedSeasonOnFirebase();
+                        }
+                        
+
                         showSeasonUnlock(
                             context,
                             'La suite du voyage vous attend',
@@ -111,20 +124,21 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
   );
 }
 
-void showErrorDialogAccess(BuildContext context, String message, String title) {
+void popUp(BuildContext context, String message, String title,
+    String buttonText, IconData icon, void Function() onButtonPressed) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        icon: const Icon(Icons.dangerous, size: 50),
+        icon: Icon(
+          icon,
+          size: 50,
+          color: globalColor,
+        ),
         title: Text(title),
         content: Text(message),
         actions: <Widget>[
-          ButtonOne(
-              onButtonPressed: () {
-                Navigator.pop(context);
-              },
-              title: 'OK')
+          ButtonOne(onButtonPressed: onButtonPressed, title: buttonText)
         ],
       );
     },
@@ -136,12 +150,17 @@ void showSeasonUnlock(BuildContext context, String message, String title) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        icon: const Icon(Icons.lock_open, size: 50),
+        icon: Icon(
+          Icons.lock_open,
+          size: 50,
+          color: globalColor,
+        ),
         title: Text(title),
         content: Text(message),
         actions: <Widget>[
           ButtonOne(
               onButtonPressed: () {
+                refreshGlobalColor();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -157,7 +176,9 @@ void showSeasonUnlock(BuildContext context, String message, String title) {
   );
 }
 
-void progress (BuildContext context,) {
+void progress(
+  BuildContext context,
+) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -165,13 +186,13 @@ void progress (BuildContext context,) {
       return Dialog(
         child: Container(
           margin: const EdgeInsets.all(10),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(
-                backgroundColor: GameTheme.mainColor,
+                backgroundColor: globalColor,
               ),
-              Text(" Chargement..."),
+              const Text(" Chargement..."),
             ],
           ),
         ),

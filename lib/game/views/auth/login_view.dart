@@ -27,8 +27,7 @@ class _LoginViewState extends State<LoginView> {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            margin:
-                EdgeInsets.only(top: responsive<double>(screenWidth, 25, 0)),
+            margin: EdgeInsets.only(top: responsive<double>(context, 25, 0)),
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(25),
@@ -39,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
                   PlayerModel.signOutWithEmail();
                 },
                 child: Image.asset(
-                  'assets/images/${responsive<String>(screenWidth, 'saison1', 'welcome')}.png',
+                  'assets/images/${responsive<String>(context, 'saison1', 'welcome')}.png',
                   height: screenWidth > 800 ? 450 : null,
                 ),
               ),
@@ -47,21 +46,21 @@ class _LoginViewState extends State<LoginView> {
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: responsive<double>(screenWidth, 25, 7),
-                bottom: responsive<double>(screenWidth, 25, 25),
-                left: responsive<double>(screenWidth, 300, 25),
-                right: responsive<double>(screenWidth, 300, 25)),
+                top: responsive<double>(context, 25, 7),
+                bottom: responsive<double>(context, 25, 25),
+                left: responsive<double>(context, 300, 25),
+                right: responsive<double>(context, 300, 25)),
             child: Form(
               child: TextFieldGame(
-
-                hintText: 'Entrez votre pseudo', controller: nameController,
+                hintText: 'Entrez votre pseudo',
+                controller: nameController,
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
-                left: responsive<double>(screenWidth, 300, 40),
-                right: responsive<double>(screenWidth, 300, 40)),
+                left: responsive<double>(context, 300, 40),
+                right: responsive<double>(context, 300, 40)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -89,8 +88,8 @@ class _LoginViewState extends State<LoginView> {
           const SizedBox(height: 20.0),
           Container(
             margin: EdgeInsets.only(
-                left: responsive<double>(screenWidth, 200, 40),
-                right: responsive<double>(screenWidth, 200, 40)),
+                left: responsive<double>(context, 200, 40),
+                right: responsive<double>(context, 200, 40)),
             child: ButtonOne(
                 title: 'Commencer le jeu',
                 onButtonPressed: () async {

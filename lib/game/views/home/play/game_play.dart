@@ -26,9 +26,31 @@ class GamePlay extends StatefulWidget {
   State<GamePlay> createState() => _GamePlayState();
 }
 
-class _GamePlayState extends State<GamePlay> {
+class _GamePlayState extends State<GamePlay>
+    with SingleTickerProviderStateMixin {
   List<String> selectedWords = [];
   List<int> selectedIndices = [];
+  AnimationController? _controller;
+  Animation<double>? _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 5, end: 50).animate(CurvedAnimation(
+      parent: _controller!,
+      curve: Curves.elasticIn,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +87,8 @@ class _GamePlayState extends State<GamePlay> {
                         bottomRight: Radius.circular(8),
                       ),
                       child: Image(
-                        image: const AssetImage('assets/images/saison1.png'),
+                        image: AssetImage(
+                            'assets/saisons/saison_${widget.season.id}/enigme_${widget.episode.id}.png'),
                         // Replace with your image
                         width: constraints.maxWidth,
                         height: screenWidth > 600
@@ -85,11 +108,28 @@ class _GamePlayState extends State<GamePlay> {
             ),
             height: 55,
             color: Colors.black26,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: selectedWords
-                  .map((letter) => SelectedGame(letter: letter))
-                  .toList(),
+            child: AnimatedBuilder(
+              animation: _animation!,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(_animation!.value, 0),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: selectedWords.map((letter) {
+                      int originalIdx =
+                          selectedIndices[selectedWords.indexOf(letter)];
+
+                      return SelectedGame(
+                          letter: letter,
+                          onTap: () {
+                            selectedWords.remove(letter);
+                            selectedIndices.remove(originalIdx);
+                            setState(() {});
+                          });
+                    }).toList(),
+                  ),
+                );
+              },
             ),
           ),
           Wrap(
@@ -119,11 +159,19 @@ class _GamePlayState extends State<GamePlay> {
               margin: const EdgeInsets.only(top: 25, bottom: 25),
               child: ButtonOne(
                   title: 'Valider',
-                  onButtonPressed: () {
+                  onButtonPressed: () async {
                     if (selectedWords.join() == widget.game.words.join()) {
                       setState(() {
                         showSuccessDialog(context, 'Felicitation',
                             widget.season, widget.episode, widget.lenght);
+                      });
+                    } else {
+                      _controller?.reset();
+                      _controller?.forward();
+                      await Future.delayed(const Duration(milliseconds: 1000));
+                      setState(() {
+                        selectedWords = [];
+                        selectedIndices = [];
                       });
                     }
                   }))

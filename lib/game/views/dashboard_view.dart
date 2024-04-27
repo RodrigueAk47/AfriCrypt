@@ -1,6 +1,5 @@
+import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
-
-import '../../core/theme.dart';
 import 'home/home_view.dart';
 import 'home/profile_view.dart';
 
@@ -31,7 +30,7 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: GameTheme.mainColor,
+        selectedItemColor: globalColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(

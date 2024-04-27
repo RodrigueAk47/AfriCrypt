@@ -16,7 +16,7 @@ dependencies:
   firebase_auth: ^4.19.2
   cloud_firestore: ^4.17.0
   shared_preferences: ^2.2.3
-  image: ^4.1.7
+  connectivity_plus: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -26,9 +26,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/
+    - assets/saisons/saison_1/
+    - assets/saisons/saison_2/
     - assets/music/
-    - assets/pdf/
+    - assets/logo/
     - assets/images/perso/
     - assets/data/database.json
+    - assets/images/
     - assets/images/data/
+    

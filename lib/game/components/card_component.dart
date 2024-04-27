@@ -1,10 +1,10 @@
 import 'package:africrypt/game/components/alert_component.dart';
 import 'package:africrypt/game/views/home/play/story_play.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/theme.dart';
 import 'button_component.dart';
 
 class HomeCard extends StatelessWidget {
@@ -45,20 +45,16 @@ class HomeCard extends StatelessWidget {
                       width: 360,
                     ),
                   ),
-                  if (!enabled)
-                    const Icon(
-                      Icons.lock,
-                      color: Colors.white,
-                      size: 50, // Size of the lock icon
-                    ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
+                    Icon(enabled ? Icons.lock_open : Icons.lock,
+                        color: globalColor),
                     Text(
-                      'Saison $numSeason : ${enabled ? 'unlock' : 'lock'} ',
+                      ' Saison $numSeason : ',
                       style: const TextStyle(fontSize: 18),
                     ),
                     Text(
@@ -66,7 +62,6 @@ class HomeCard extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     ),
-
                   ],
                 ),
               )
@@ -122,7 +117,7 @@ class SeasonCard extends StatelessWidget {
                 children: [
                   Icon(
                     enabled ? Icons.play_arrow : Icons.lock,
-                    color: GameTheme.mainColor,
+                    color: globalColor,
                     size: 45,
                   ),
                   const SizedBox(
@@ -162,10 +157,14 @@ class SeasonCard extends StatelessWidget {
                                       season: season,
                                       episode: episode,
                                     )))
-                        : showErrorDialogAccess(
+                        : popUp(
                             context,
                             'Veuillez terminer l\'episode precedente',
-                            'Verrouillé');
+                            'Verrouillé',
+                            'Ok',
+                            Icons.lock, () {
+                            Navigator.pop(context);
+                          });
                   })
             ],
           ),

@@ -1,16 +1,21 @@
 import 'package:africrypt/Models/episodes_model.dart';
 import 'package:africrypt/Models/season_model.dart';
-import 'package:africrypt/core/theme.dart';
+import 'package:africrypt/features/string_feature.dart';
+
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/text_field_component.dart';
 import 'package:africrypt/game/views/auth/login_view.dart';
 import 'package:africrypt/game/views/auth/register_view.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/player_model.dart';
+
 import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -43,51 +48,60 @@ class SignIn extends StatelessWidget {
               const SizedBox(height: 25),
               ButtonOne(
                   onButtonPressed: () async {
-                    final String email = emailController.text.trim();
-                    final String password = passwordController.text.trim();
+                    if (await isInternetConnected()) {
+                      final String email = emailController.text.trim();
+                      final String password = passwordController.text.trim();
 
-                    String? signInResult =
-                        (await PlayerModel.signInWithEmail(email, password))
-                            as String?;
-                    if (signInResult == null) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircularProgressIndicator(
-                                    backgroundColor: GameTheme.mainColor,
-                                  ),
-                                  Text(" Chargement..."),
-                                ],
+                      String? signInResult =
+                          (await PlayerModel.signInWithEmail(email, password));
+                      if (signInResult == null) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      backgroundColor: globalColor,
+                                    ),
+                                    const Text(" Chargement..."),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            );
+                          },
+                        );
 
-                      try {
-                        await PlayerModel
-                            .restoreFromFirestoreToSharedPreferences();
-                        await Season.restoreLastUnlockedSeason();
-                        await Episode.restoreLastUnlockedEpisodes();
-                      } catch (e) {
-                        // Handle error
-                      } finally {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Dashboard()),
-                        ); // Close the dialog
+                        try {
+                          await PlayerModel
+                              .restoreFromFirestoreToSharedPreferences();
+                          await Season.restoreLastUnlockedSeason();
+                          await Episode.restoreLastUnlockedEpisodes();
+                        } catch (e) {
+                          // Handle error
+                        } finally {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Dashboard()),
+                          ); // Close the dialog
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(signInResult),
+                          action: SnackBarAction(
+                            label: 'OK',
+                            onPressed: () {},
+                          ),
+                        ));
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(signInResult),
+                        content: const Text('Pas de connexion Internet'),
                         action: SnackBarAction(
                           label: 'OK',
                           onPressed: () {},

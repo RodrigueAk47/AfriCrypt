@@ -38,15 +38,16 @@ class StoryPlay extends StatelessWidget {
                       bottom: 20,
                     )
                   : const EdgeInsets.all(0),
-              child: SfPdfViewer.asset(episode.stories.pdf),
+              child: SfPdfViewer.asset(
+                  'assets/saisons/saison_${season.id}/story_${episode.id}.pdf'),
             ),
           ),
           Container(
             margin: EdgeInsets.only(
-                left: responsive<double>(screenWidth, 200, 5),
-                right: responsive<double>(screenWidth, 200, 5),
-                top: responsive<double>(screenWidth, 10, 5),
-                bottom: responsive<double>(screenWidth, 10, 5)),
+                left: responsive<double>(context, 200, 5),
+                right: responsive<double>(context, 200, 5),
+                top: responsive<double>(context, 10, 5),
+                bottom: responsive<double>(context, 10, 5)),
             child: ButtonOne(
                 title: 'Jouer',
                 onButtonPressed: () {

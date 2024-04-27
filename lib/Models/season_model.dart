@@ -9,7 +9,6 @@ class Season {
   final int id;
   final String title;
   final String description;
-  final String theme;
   final List<Episode> episodes;
   bool isUnlocked;
 
@@ -17,7 +16,6 @@ class Season {
     required this.id,
     required this.title,
     required this.description,
-    required this.theme,
     required this.episodes,
     this.isUnlocked = false,
   });
@@ -32,7 +30,6 @@ class Season {
     return Season(
       id: json['numero'],
       title: json['titre'],
-      theme: json['theme'],
       description: json['description'],
       episodes: episodes,
     );
@@ -54,9 +51,14 @@ class Season {
     await prefs.setInt('last_unlocked_season', seasonNumber);
   }
 
+  static Future<int> getLastUnlockedSeason() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('last_unlocked_season') ?? 1;
+  }
+
   static Future<bool> isSeasonUnlocked(int seasonNumber) async {
     final prefs = await SharedPreferences.getInstance();
-    int lastUnlockedSeason = prefs.getInt('last_unlocked_season') ?? 0;
+    int lastUnlockedSeason = prefs.getInt('last_unlocked_season') ?? 1;
     return seasonNumber <= lastUnlockedSeason;
   }
 
@@ -65,10 +67,11 @@ class Season {
     await prefs.remove('last_unlocked_season');
   }
 
-  static Future<void> saveLastUnlockedSeasonOnFirebase(
-      int lastUnlockedSeason) async {
+  static Future<void> saveLastUnlockedSeasonOnFirebase() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int lastUnlockedSeason = prefs.getInt('last_unlocked_season') ?? 1;
       await _firestore.collection('players').doc(user.uid).set({
         'last_unlocked_season': lastUnlockedSeason,
       }, SetOptions(merge: true));

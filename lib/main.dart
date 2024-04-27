@@ -1,18 +1,31 @@
-import 'package:africrypt/game/views/auth/signin_view.dart';
+import 'dart:async';
+import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/models/episodes_model.dart';
-import 'package:africrypt/models/player_model.dart';
 import 'package:africrypt/models/season_model.dart';
+import 'package:africrypt/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/firebase_options.dart';
-import 'game/views/dashboard_view.dart';
+
+StreamController<Color> colorStreamController = StreamController<Color>();
+Color globalColor = GameTheme.colors[0];
+
+void refreshGlobalColor() async {
+  int lastUnlockedSeason = await Season.getLastUnlockedSeason();
+  globalColor = GameTheme.colors[lastUnlockedSeason - 1];
+  colorStreamController.add(globalColor);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  refreshGlobalColor();
+  Season.getLastUnlockedSeason().then((value) {
+    globalColor = GameTheme.colors[value - 1];
+  });
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -28,6 +41,8 @@ void main() async {
   if (lastUnlockedEpisode == null) {
     await Episode.saveLastUnlockedEpisode(lastUnlockedSeason, 0);
   }
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+      overlays: []);
 
   runApp(const Game());
 }
@@ -42,21 +57,13 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  Widget _homePage = const SignIn(); // initial la page de connexion
-
-  Future<void> checkTableAndRedirect() async {
-    if (await PlayerModel.loadFromSharedPreferences() != null) {
-      setState(() {
-        _homePage = const Dashboard();
-      });
-    }
-  }
+  // initial la page de connexion
 
   @override
   void initState() {
     super.initState();
 
-    checkTableAndRedirect(); // Vérifier la table et rediriger au lancement
+    // Vérifier la table et rediriger au lancement
     /*WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Démarrer le son après le premier rendu
       AudioPlayer audioPlayer = AudioPlayer();
@@ -67,10 +74,15 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'AfriCrypt',
-      home: _homePage,
-    );
+    return StreamBuilder<Color>(
+        stream: colorStreamController.stream,
+        initialData: globalColor,
+        builder: (context, snapshot) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'AfriCrypt',
+            home: SplashScreen(),
+          );
+        });
   }
 }

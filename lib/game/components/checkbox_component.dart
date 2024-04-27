@@ -1,4 +1,5 @@
-import 'package:africrypt/core/theme.dart';
+
+import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
 
 class CheckboxLogin extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CheckboxLoginState extends State<CheckboxLogin> {
           Checkbox(
             value: widget.isGender,
             onChanged: widget.onPressed,
-            activeColor: GameTheme.mainColor,
+            activeColor: globalColor,
           )
         ],
       ),
