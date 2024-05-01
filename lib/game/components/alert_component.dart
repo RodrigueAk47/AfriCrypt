@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:africrypt/Models/game_model.dart';
+import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
@@ -72,23 +74,20 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
               title: 'Suivant!  ',
               onButtonPressed: () async {
                 Episode.saveLastUnlockedEpisode(season.id, episode.id);
-                if (await isInternetConnected() &&
+                if (
                     FirebaseAuth.instance.currentUser != null) {
                   Episode.saveLastUnlockedEpisodeOnFirebase(
                       season.id, episode.id);
                 }
-                
 
                 Episode.getLastUnlockedEpisode(season.id).then(
                   (value) async {
                     if (value == season.episodes.length) {
                       if (lenght != season.id) {
                         Season.saveLastUnlockedSeason(season.id + 1);
-                        if (await isInternetConnected() &&
-                            FirebaseAuth.instance.currentUser != null) {
+                        if (FirebaseAuth.instance.currentUser != null) {
                           Season.saveLastUnlockedSeasonOnFirebase();
                         }
-                        
 
                         showSeasonUnlock(
                             context,
@@ -136,11 +135,117 @@ void popUp(BuildContext context, String message, String title,
           color: globalColor,
         ),
         title: Text(title),
-        content: Text(message),
+        content: Text(
+          message,
+          style: const TextStyle(fontSize: 16),
+        ),
         actions: <Widget>[
           ButtonOne(onButtonPressed: onButtonPressed, title: buttonText)
         ],
       );
+    },
+  );
+}
+
+void popUpHint(
+  BuildContext context,
+  Season season,
+  Episode episode,
+  String hint,
+  String title,
+  String buttonText,
+  IconData icon,
+  PlayerModel player,
+  bool paid,
+  Function(bool) onShowChange,
+  void Function() onButtonPressed,
+) {
+  bool show = false;
+
+  bool load = true;
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+        return AlertDialog(
+          icon: Icon(
+            icon,
+            size: 50,
+            color: globalColor,
+          ),
+          title: Text(title),
+          content: TextButton(
+              onPressed: () async {
+                print(paid);
+                if (paid) {
+                  setState(() {
+                    show = true;
+                  });
+                } else {
+                  if (player.coins != 0) {
+                    await GameModel.unlockHint(season.id, episode.id);
+
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      GameModel.saveHintsToFirebase(season.id);
+                    }
+
+                    await PlayerModel.decrementCoins();
+                    setState(() {
+                      onShowChange(true);
+                      show = true;
+                    });
+                    print('c\'est fait');
+                  } else {
+                    setState(() {
+                      load = false;
+                    });
+                  }
+                }
+              },
+              child: show
+                  ? FutureBuilder(
+                      future: Future.delayed(const Duration(seconds: 2)),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return LinearProgressIndicator(
+                            color: globalColor,
+                          );
+                        } else {
+                          return Text(hint);
+                        }
+                      },
+                    )
+                  : load
+                      ? const Text('*******')
+                      : const Text('Votre solde est insuffisant')),
+          actions: <Widget>[
+            Row(
+              children: [
+                Icon(
+                  Icons.payment,
+                  color: globalColor,
+                ),
+                Text(
+                  "Solde : ${player.coins}",
+                  style: const TextStyle(fontSize: 16),
+                )
+              ],
+            ),
+            const Center(
+              child: Text(
+                'Vous serez facturé pour l\'aide',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ButtonOne(onButtonPressed: onButtonPressed, title: buttonText)
+          ],
+        );
+      });
     },
   );
 }

@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:africrypt/features/string_feature.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerModel {
@@ -18,6 +21,8 @@ class PlayerModel {
   static final Future<SharedPreferences> _prefs =
       SharedPreferences.getInstance();
 
+  static final user = FirebaseAuth.instance.currentUser;
+
   static Future<void> saveUserFirestores() async {
     final prefs = await SharedPreferences.getInstance();
     String? playerJson = prefs.getString('player');
@@ -33,6 +38,29 @@ class PlayerModel {
           'gender': playerData['gender'],
           'coins': playerData['coins'],
         }, SetOptions(merge: true));
+      }
+    }
+  }
+
+  static Future<void> decrementCoins() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? playerJson = prefs.getString('player');
+    if (playerJson != null) {
+      Map<String, dynamic> playerData = jsonDecode(playerJson);
+      int currentCoins = playerData['coins'] ?? 0;
+      if (currentCoins > 0) {
+        playerData['coins'] = currentCoins - 1;
+        playerJson = jsonEncode(playerData);
+        await prefs.setString('player', playerJson);
+
+        if (user != null) {
+          await FirebaseFirestore.instance
+              .collection('players')
+              .doc(user!.uid)
+              .update({
+            'coins': playerData['coins'],
+          });
+        }
       }
     }
   }
@@ -73,6 +101,9 @@ class PlayerModel {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        user!.sendEmailVerification();
+      }
       return null; // return null if there's no error
     } on FirebaseAuthException catch (e) {
       // Handle errors

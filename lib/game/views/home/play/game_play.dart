@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
+import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/game_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
+import 'package:africrypt/Models/player_model.dart';
 
 import '../../../components/alert_component.dart';
 
@@ -28,10 +32,14 @@ class GamePlay extends StatefulWidget {
 
 class _GamePlayState extends State<GamePlay>
     with SingleTickerProviderStateMixin {
+  bool money = false;
   List<String> selectedWords = [];
   List<int> selectedIndices = [];
   AnimationController? _controller;
   Animation<double>? _animation;
+  PlayerModel? player;
+  bool show = false;
+  late StreamController<bool> _streamController;
 
   @override
   void initState() {
@@ -44,11 +52,28 @@ class _GamePlayState extends State<GamePlay>
       parent: _controller!,
       curve: Curves.elasticIn,
     ));
+    PlayerModel.loadFromSharedPreferences().then((loadedPlayer) {
+      setState(() {
+        player = loadedPlayer;
+      });
+    });
+    _streamController = StreamController<bool>();
+    _checkHintUnlocked();
+  }
+
+  Future<void> _checkHintUnlocked() async {
+    bool hintUnlocked =
+        await GameModel.isHintUnlocked(widget.season.id, widget.episode.id);
+    _streamController.add(hintUnlocked);
+    setState(() {
+      show = hintUnlocked;
+    });
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    _streamController.close();
     super.dispose();
   }
 
@@ -60,6 +85,33 @@ class _GamePlayState extends State<GamePlay>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.game.title),
+        actions: [
+          IconButton(
+              tooltip: 'Aide',
+              onPressed: () {
+                popUpHint(
+                  context,
+                  widget.season,
+                  widget.episode,
+                  widget.game.hint,
+                  'Indice',
+                  'Go..',
+                  Icons.help_center,
+                  player!,
+                  show,
+                  (bool newvalue) {
+                    show = newvalue;
+                  },
+                  () {
+                    Navigator.pop(context);
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.help_rounded,
+                color: globalColor,
+              ))
+        ],
       ),
       body: ListView(
         children: [

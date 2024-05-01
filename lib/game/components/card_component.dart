@@ -4,6 +4,7 @@ import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'button_component.dart';
 
@@ -27,45 +28,51 @@ class HomeCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPressCard,
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-        child: Card(
-          elevation: 4,
-          margin: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Stack(
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15)),
-                    child: Image.asset(
-                      img,
-                      fit: BoxFit.cover,
-                      width: 360,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Icon(enabled ? Icons.lock_open : Icons.lock,
-                        color: globalColor),
-                    Text(
-                      ' Saison $numSeason : ',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600),
+        width: 400,
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+          child: Card(
+            elevation: 4,
+            margin: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)),
+                      child: Image.asset(
+                        img,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ],
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(enabled ? Icons.lock_open : Icons.lock,
+                          color: globalColor),
+                      Text(
+                        ' Saison $numSeason: ',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      Flexible(
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

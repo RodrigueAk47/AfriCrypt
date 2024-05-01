@@ -41,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person, size: 40),
-            label: 'Profil',
+            label: 'Joueur',
           ),
         ],
       ),

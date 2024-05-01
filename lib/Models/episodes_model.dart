@@ -8,6 +8,7 @@ class Episode {
   final String title;
   final String description;
   final Story stories;
+
   bool? isUnlocked;
 
   Episode({
@@ -25,6 +26,7 @@ class Episode {
       id: json['numero'],
       title: json['titre'],
       description: json['description'],
+
       stories: Story.fromJson(json['stories']),
     );
   }

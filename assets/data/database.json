@@ -2,8 +2,8 @@
     "saison": [
         {
             "numero": 1,
-            "titre": "Le Commencement",
-            "description": "Vivez une epope de dingue",
+            "titre": "Egypte I",
+            "description": "Au coeur des pyramides",
             "episodes": [
                 {
                     "numero": 1,
@@ -16,7 +16,7 @@
                                 {
                                     "titre": "Qui suis je ?",
                                     "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                    
+                                    "indice": "C'est le dernier roi d'egypte",
                                     "mots": [
                                         "G",
                                         "E",
@@ -40,7 +40,7 @@
                                 {
                                     "titre": "Qui suis je ?",
                                     "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                    
+                                    "indice": "C'est le dernier roi d'egypte",
                                     "mots": [
                                         "G",
                                         "E",
@@ -69,7 +69,7 @@
                                 {
                                     "titre": "Qui suis je ?",
                                     "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                   
+                                    "indice": "C'est le dernier roi d'egypte",
                                     "mots": [
                                         "1",
                                         "1",

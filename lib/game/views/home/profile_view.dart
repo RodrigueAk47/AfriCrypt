@@ -5,6 +5,7 @@ import 'package:africrypt/game/views/auth/signin_view.dart';
 import 'package:africrypt/main.dart';
 import 'package:africrypt/models/player_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -16,16 +17,20 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   PlayerModel? player;
+  bool show = false;
+  bool isVerificationEmailSent = false;
 
   @override
   void initState() {
     super.initState();
-    print('succes');
     PlayerModel.loadFromSharedPreferences().then((loadedPlayer) {
       setState(() {
         player = loadedPlayer;
       });
     });
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser!.reload();
+    }
   }
 
   @override
@@ -74,6 +79,35 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
+            if (defaultTargetPlatform == TargetPlatform.android &&
+                user != null &&
+                user.emailVerified == false)
+              TextButton(
+                  onPressed: () async {
+                    if (!isVerificationEmailSent) {
+                      user.sendEmailVerification();
+                      isVerificationEmailSent = true;
+                    }
+                    setState(() {
+                      show = true;
+                    });
+                  },
+                  child: show
+                      ? FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 2)),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return LinearProgressIndicator(
+                                color: globalColor,
+                              );
+                            } else {
+                              return const Text(
+                                  'Un code été envoyé sur votre mail');
+                            }
+                          },
+                        )
+                      : const Text('Veuillez valider votre addresse mail')),
             const SizedBox(height: 10),
             Container(
               margin: EdgeInsets.only(
@@ -83,7 +117,7 @@ class _ProfileState extends State<Profile> {
                   bottom: responsive<double>(context, 10, 5)),
               child: user != null
                   ? ButtonOne(
-                      title: 'Resert',
+                      title: 'Se deconnecter',
                       onButtonPressed: () async {
                         progress(context);
 

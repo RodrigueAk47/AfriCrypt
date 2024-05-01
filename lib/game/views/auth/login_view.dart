@@ -23,6 +23,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(),
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -33,21 +34,16 @@ class _LoginViewState extends State<LoginView> {
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25),
               ),
-              child: GestureDetector(
-                onTap: () {
-                  PlayerModel.signOutWithEmail();
-                },
-                child: Image.asset(
-                  'assets/images/${responsive<String>(context, 'saison1', 'welcome')}.png',
-                  height: screenWidth > 800 ? 450 : null,
-                ),
+              child: Image.asset(
+                'assets/images/${responsive<String>(context, 'saison1', 'welcome')}.png',
+                height: screenWidth > 800 ? 450 : null,
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(
-                top: responsive<double>(context, 25, 7),
-                bottom: responsive<double>(context, 25, 25),
+                top: responsive<double>(context, 15, 7),
+                bottom: responsive<double>(context, 15, 25),
                 left: responsive<double>(context, 300, 25),
                 right: responsive<double>(context, 300, 25)),
             child: Form(

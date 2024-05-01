@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:africrypt/core/theme.dart';
-import 'package:africrypt/models/episodes_model.dart';
+
 import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/splash_screen.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/firebase_options.dart';
 
@@ -29,18 +30,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final prefs = await SharedPreferences.getInstance();
-  int? lastUnlockedSeason = prefs.getInt('last_unlocked_season');
-  if (lastUnlockedSeason == null) {
-    await Season.saveLastUnlockedSeason(1);
-    lastUnlockedSeason = 1;
-  }
+  FirebaseFirestore.instance.settings.persistenceEnabled;
 
-  String? lastUnlockedEpisode =
-      prefs.getString('last_unlocked_episode_$lastUnlockedSeason');
-  if (lastUnlockedEpisode == null) {
-    await Episode.saveLastUnlockedEpisode(lastUnlockedSeason, 0);
-  }
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
       overlays: []);
 
@@ -56,20 +47,34 @@ class Game extends StatefulWidget {
   State<Game> createState() => _GameState();
 }
 
-class _GameState extends State<Game> {
-  // initial la page de connexion
+class _GameState extends State<Game> with WidgetsBindingObserver {
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
 
-    // Vérifier la table et rediriger au lancement
-    /*WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Démarrer le son après le premier rendu
-      AudioPlayer audioPlayer = AudioPlayer();
+WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       audioPlayer.setReleaseMode(ReleaseMode.loop);
       await audioPlayer.play(AssetSource('music/theme.mp3'));
-    });*/
+    });
+  }
+
+   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+@override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      audioPlayer.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      audioPlayer.resume();
+    }
   }
 
   @override

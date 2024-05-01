@@ -39,6 +39,7 @@ class RegisterAuth extends StatelessWidget {
               ),
               const SizedBox(height: 25),
               TextFieldGame(
+                obscurText: true,
                 hintText: 'Votre mot de passe',
                 controller: passwordController,
               ),

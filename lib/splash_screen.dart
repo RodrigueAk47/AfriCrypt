@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/game/views/auth/signin_view.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
@@ -23,27 +25,36 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
+  bool _showFirstImage = true;
+  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
     checkTableAndRedirect();
     _controller = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 4),
       vsync: this,
     )
       ..addListener(() {
         setState(() {});
       })
       ..forward();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 4), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => _homePage));
+    });
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      setState(() {
+        _showFirstImage = !_showFirstImage;
+      });
     });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -57,9 +68,18 @@ class _SplashScreenState extends State<SplashScreen>
             const Text('Africrypt',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
             const SizedBox(height: 60),
-            Image.asset('assets/logo/logo.png', width: 150, height: 150),
+            AnimatedCrossFade(
+              duration: const Duration(seconds: 1),
+              secondChild:
+                  Image.asset('assets/logo/logo.png', width: 150, height: 150),
+              firstChild: Image.asset('assets/logo/genuis-game.png',
+                  width: 150, height: 150),
+              crossFadeState: _showFirstImage
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+            ),
             const SizedBox(height: 25),
-            const Text('Powered by GenuisGame',
+            const Text('Powered by Genuis Game',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             Padding(
               padding: const EdgeInsets.all(60),

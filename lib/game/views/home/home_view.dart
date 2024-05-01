@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:africrypt/Models/episodes_model.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/alert_component.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
@@ -14,6 +18,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late PageController _controller;
+  late Timer _timer;
+  int stopPage = 1;
   int lastUnlockedSeasonNumber = 1;
   @override
   void initState() {
@@ -21,8 +28,34 @@ class _HomeState extends State<Home> {
     Season.getLastUnlockedSeason().then((id) {
       setState(() {
         lastUnlockedSeasonNumber = id;
+        stopPage = id - 1;
       });
     });
+
+    _controller = PageController(initialPage: 0, viewportFraction: 1);
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_controller.hasClients) {
+        if (_controller.page!.round() == _controller.page) {
+          if (_controller.page! < _controller.position.maxScrollExtent &&
+              _controller.page! < stopPage) {
+            _controller.nextPage(
+              duration: const Duration(seconds: 3),
+              curve: Curves.easeInOut,
+            );
+            _timer.cancel();
+          } else {
+            _timer.cancel(); // Arrête l'animation
+          }
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -137,9 +170,9 @@ class _HomeState extends State<Home> {
                             ),
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.paid,
-                                  color: Colors.amber,
+                                  color: globalColor,
                                   size: 55.0,
                                 ),
                                 const SizedBox(
@@ -179,65 +212,69 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w900,
                         color: globalColor)),
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: FutureBuilder(
-                  future: Season.loadSaisonsFromAssets(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data != null) {
-                      final seasons = snapshot.data as List<Season>;
-                      int global = seasons.length;
-                      return Row(
-                        children: seasons
-                            .map((season) => FutureBuilder<bool>(
-                                  future: Season.isSeasonUnlocked(season.id),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const CircularProgressIndicator(); // Show a loading spinner while waiting
-                                    } else if (snapshot.hasError) {
-                                      return Text(
-                                          'Error: ${snapshot.error}'); // Show an error message if something went wrong
-                                    } else if (snapshot.hasData) {
-                                      bool isUnlocked = snapshot.data ?? false;
-                                      return HomeCard(
-                                          enabled: isUnlocked,
-                                          img:
-                                              "assets/images/data/saison${season.id}.png",
-                                          numSeason: season.id,
-                                          title: season.title,
-                                          onPressCard: () {
-                                            isUnlocked
-                                                ? Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            SeasonPlay(
-                                                                lenght: global,
-                                                                season:
-                                                                    season)))
-                                                : popUp(
-                                                    context,
-                                                    'Veuillez terminer la saison precedente',
-                                                    'Verrouillé',
-                                                    'OK',
-                                                    Icons.lock, () {
-                                                    Navigator.pop(context);
-                                                  });
-                                          });
-                                    } else {
-                                      return const SizedBox
-                                          .shrink(); // Return an empty widget if no data
-                                    }
-                                  },
-                                ))
-                            .toList(),
-                      );
-                    } else {
-                      return const CircularProgressIndicator(); // Show a loading spinner while waiting for seasons data
-                    }
-                  },
-                ),
+              FutureBuilder(
+                future: Season.loadSaisonsFromAssets(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    final seasons = snapshot.data as List<Season>;
+
+                    return SizedBox(
+                      height: 309,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          controller: _controller,
+                          itemCount: seasons.length,
+                          itemBuilder: (context, index) {
+                            Season season = seasons[index];
+
+                            return FutureBuilder<bool>(
+                              future: Season.isSeasonUnlocked(season.id),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator(); // Show a loading spinner while waiting
+                                } else if (snapshot.hasError) {
+                                  return Text(
+                                      'Error: ${snapshot.error}'); // Show an error message if something went wrong
+                                } else if (snapshot.hasData) {
+                                  bool isUnlocked = snapshot.data ?? false;
+                                  return HomeCard(
+                                      enabled: isUnlocked,
+                                      img:
+                                          "assets/images/data/saison${season.id}.png",
+                                      numSeason: season.id,
+                                      title: season.title,
+                                      onPressCard: () {
+                                        isUnlocked
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SeasonPlay(
+                                                            lenght:
+                                                                seasons.length,
+                                                            season: season)))
+                                            : popUp(
+                                                context,
+                                                'Veuillez terminer la saison precedente',
+                                                'Verrouillé',
+                                                'OK',
+                                                Icons.lock, () {
+                                                Navigator.pop(context);
+                                              });
+                                      });
+                                } else {
+                                  return const SizedBox
+                                      .shrink(); // Return an empty widget if no data
+                                }
+                              },
+                            );
+                          }),
+                    );
+                  } else {
+                    return const CircularProgressIndicator(); // Show a loading spinner while waiting for seasons data
+                  }
+                },
               )
             ],
           ),

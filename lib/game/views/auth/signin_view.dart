@@ -1,4 +1,5 @@
 import 'package:africrypt/Models/episodes_model.dart';
+import 'package:africrypt/Models/game_model.dart';
 import 'package:africrypt/Models/season_model.dart';
 import 'package:africrypt/features/string_feature.dart';
 
@@ -14,8 +15,6 @@ import 'package:flutter/material.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +42,7 @@ class SignIn extends StatelessWidget {
               const SizedBox(height: 25),
               TextFieldGame(
                 hintText: 'Votre mot de passe',
+                obscurText: true,
                 controller: passwordController,
               ),
               const SizedBox(height: 25),
@@ -81,6 +81,7 @@ class SignIn extends StatelessWidget {
                               .restoreFromFirestoreToSharedPreferences();
                           await Season.restoreLastUnlockedSeason();
                           await Episode.restoreLastUnlockedEpisodes();
+                          await GameModel.restoreHintFromFirestore();
                         } catch (e) {
                           // Handle error
                         } finally {
@@ -124,9 +125,9 @@ class SignIn extends StatelessWidget {
                         fontSize: 18,
                         color: Colors.purple,
                       ))),
+              const SizedBox(height: 6),
               ButtonOne(
                   onButtonPressed: () {
-                    PlayerModel.signOutWithEmail();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
