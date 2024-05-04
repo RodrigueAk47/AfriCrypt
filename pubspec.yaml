@@ -22,17 +22,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  msix: ^3.16.7
 
-msix_config:
-  display_name: AfriCrypt
-  publisher_display_name: Genuis Game
-  identity_name: genuis.game.africrypt
-  msix_version: 0.0.1.0
-  logo_path: C:\Users\rodrigue\IdeaProjects\AfriCrypt\assets\logo\logo.png
-  capabilities: internetClient
-  certificate_path: "africryptCert.pfx"
-  certificate_password: "genuisgamegroup"
 
 flutter:
   uses-material-design: true
