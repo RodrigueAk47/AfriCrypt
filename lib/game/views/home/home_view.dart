@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:africrypt/Models/episodes_model.dart';
-import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/alert_component.dart';
 import 'package:africrypt/game/components/card_component.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
@@ -22,6 +20,7 @@ class _HomeState extends State<Home> {
   late Timer _timer;
   int stopPage = 1;
   int lastUnlockedSeasonNumber = 1;
+
   @override
   void initState() {
     super.initState();
@@ -121,86 +120,95 @@ class _HomeState extends State<Home> {
           ),
           child: ListView(
             children: [
-              Card(
-                color: Colors.white,
-                elevation: 4,
+              Container(
                 margin: const EdgeInsets.only(left: 16, right: 16),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: FutureBuilder(
-                    future: PlayerModel.loadFromSharedPreferences(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData && snapshot.data != null) {
-                        PlayerModel player = snapshot.data!;
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.video_camera_back,
-                                  color: globalColor,
-                                  size: 55.0,
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Column(
-                                  children: [
-                                    const Text(
-                                      'Saison',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text(
-                                      lastUnlockedSeasonNumber.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Container(
-                              color: Colors.grey,
-                              child: const VerticalDivider(
-                                width: 2,
-                                endIndent: 60,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  border: Border(
+                      left: BorderSide(width: 5, color: globalColor),
+                      right: BorderSide(width: 5, color: globalColor)),
+                ),
+                child: Card(
+
+                  elevation: 4,
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: FutureBuilder(
+                      future: PlayerModel.loadFromSharedPreferences(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData && snapshot.data != null) {
+                          PlayerModel player = snapshot.data!;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.video_camera_back,
+                                    color: globalColor,
+                                    size: 55.0,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Saison',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      Text(
+                                        lastUnlockedSeasonNumber.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.paid,
-                                  color: globalColor,
-                                  size: 55.0,
+                              Container(
+                                color: Colors.grey,
+                                child: const VerticalDivider(
+                                  width: 2,
+                                  endIndent: 60,
                                 ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Column(
-                                  children: [
-                                    const Text(
-                                      'Coins',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text(
-                                      player.coins.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.w900),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text("Erreur : ${snapshot.error}");
-                      }
-                      return const Text('Hey');
-                    },
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.paid,
+                                    color: globalColor,
+                                    size: 55.0,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Coins',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      Text(
+                                        player.coins.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w900),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("Erreur : ${snapshot.error}");
+                        }
+                        return const Text('Hey');
+                      },
+                    ),
                   ),
                 ),
               ),

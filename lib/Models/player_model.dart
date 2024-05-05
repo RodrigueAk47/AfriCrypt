@@ -1,10 +1,7 @@
 import 'dart:convert';
-
-import 'package:africrypt/features/string_feature.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerModel {
@@ -53,14 +50,7 @@ class PlayerModel {
         playerJson = jsonEncode(playerData);
         await prefs.setString('player', playerJson);
 
-        if (user != null) {
-          await FirebaseFirestore.instance
-              .collection('players')
-              .doc(user!.uid)
-              .update({
-            'coins': playerData['coins'],
-          });
-        }
+
       }
     }
   }
@@ -99,7 +89,7 @@ class PlayerModel {
 
   static Future<String?> signUpWithEmail(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       if (defaultTargetPlatform == TargetPlatform.android) {
         user!.sendEmailVerification();
@@ -120,7 +110,7 @@ class PlayerModel {
 
   static Future<String?> signInWithEmail(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       return null; // return null if there's no error
     } on FirebaseAuthException catch (e) {
@@ -163,4 +153,23 @@ class PlayerModel {
       await prefs.setString('player', jsonEncode(playerData));
     }
   }
+
+  static Future<void> updateCoinsToFirebase() async {
+  final prefs = await SharedPreferences.getInstance();
+  String? playerJson = prefs.getString('player');
+  if (playerJson != null) {
+    Map<String, dynamic> playerData = jsonDecode(playerJson);
+    int currentCoins = playerData['coins'] ?? 0;
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('players')
+          .doc(user.uid)
+          .update({
+        'coins': currentCoins,
+      });
+    }
+  }
+}
 }

@@ -1,3 +1,4 @@
+import 'package:africrypt/core/theme.dart';
 import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/alert_component.dart';
 import 'package:africrypt/game/components/button_component.dart';
@@ -124,7 +125,7 @@ class _ProfileState extends State<Profile> {
                         try {
                           await PlayerModel.signOutWithEmail();
                           await PlayerModel.deletePlayerData();
-                          refreshGlobalColor();
+                          GameTheme.refreshGlobalColor();
                         } catch (e) {
                           // Handle error
                         } finally {
@@ -140,7 +141,7 @@ class _ProfileState extends State<Profile> {
                         progress(context);
                         try {
                           await PlayerModel.deletePlayerData();
-                          refreshGlobalColor();
+                          GameTheme.refreshGlobalColor();
                         } catch (e) {
                           // Handle error
                         } finally {

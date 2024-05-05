@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:africrypt/Models/game_model.dart';
 import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/core/theme.dart';
-import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/game/views/home/play/season_play.dart';
@@ -191,6 +190,8 @@ void popUpHint(
                     }
 
                     await PlayerModel.decrementCoins();
+                    await PlayerModel.updateCoinsToFirebase();
+
                     setState(() {
                       onShowChange(true);
                       show = true;
@@ -265,7 +266,7 @@ void showSeasonUnlock(BuildContext context, String message, String title) {
         actions: <Widget>[
           ButtonOne(
               onButtonPressed: () {
-                refreshGlobalColor();
+                GameTheme.refreshGlobalColor();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

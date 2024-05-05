@@ -1,3 +1,5 @@
+import 'package:africrypt/Models/season_model.dart';
+import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
 
 class GameTheme {
@@ -12,4 +14,10 @@ class GameTheme {
     Colors.purple,
     Colors.pink
   ];
+
+  static void refreshGlobalColor() async {
+    int lastUnlockedSeason = await Season.getLastUnlockedSeason();
+    globalColor = GameTheme.colors[lastUnlockedSeason - 1];
+    colorStreamController.add(globalColor);
+  }
 }

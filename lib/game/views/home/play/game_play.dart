@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
 import 'package:africrypt/main.dart';
@@ -7,7 +8,6 @@ import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/game_model.dart';
 import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
-import 'package:africrypt/Models/player_model.dart';
 
 import '../../../components/alert_component.dart';
 
@@ -32,7 +32,7 @@ class GamePlay extends StatefulWidget {
 
 class _GamePlayState extends State<GamePlay>
     with SingleTickerProviderStateMixin {
-  bool money = false;
+  bool money = true;
   List<String> selectedWords = [];
   List<int> selectedIndices = [];
   AnimationController? _controller;
