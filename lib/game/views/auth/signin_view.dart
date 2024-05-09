@@ -23,16 +23,14 @@ class _SignInState extends State<SignIn> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
-
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/saisons/saison_1/saison.png'),
+                image: AssetImage('assets/images/main.jpg'),
                 fit: BoxFit.cover)),
         child: Container(
           margin: screenWidth > 800
@@ -41,28 +39,30 @@ class _SignInState extends State<SignIn> {
                   right: MediaQuery.of(context).size.width * 0.2,
                   top: 25,
                   bottom: 20)
-              : const EdgeInsets.only(
-                  left: 10, right: 10, top: 20, bottom: 20),
+              : const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
           padding: const EdgeInsets.all(8.0),
           child: Padding(
-            padding:  EdgeInsets.only(top: responsive<double>(context, 130, 70)),
+            padding: EdgeInsets.only(top: responsive<double>(context, 130, 70)),
             child: ListView(
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(8.0), // Add padding to make the text look better
+                      padding: const EdgeInsets.all(
+                          8.0), // Add padding to make the text look better
                       decoration: BoxDecoration(
                         color: globalColor, // This is the background color
-                        borderRadius: BorderRadius.circular(15), // This makes the corners rounded
+                        borderRadius: BorderRadius.circular(
+                            15), // This makes the corners rounded
                       ),
                       child: const Text(
-                          'Se connecter',
+                        'Se connecter',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,
-                          fontWeight: FontWeight.bold,// This is the color of the text
+                          fontWeight:
+                              FontWeight.bold, // This is the color of the text
                         ),
                       ),
                     ),
@@ -81,7 +81,8 @@ class _SignInState extends State<SignIn> {
                         onButtonPressed: () async {
                           if (await isInternetConnected()) {
                             final String email = emailController.text.trim();
-                            final String password = passwordController.text.trim();
+                            final String password =
+                                passwordController.text.trim();
 
                             String? signInResult =
                                 (await PlayerModel.signInWithEmail(
@@ -105,7 +106,8 @@ class _SignInState extends State<SignIn> {
                                 ); // Close the dialog
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                 content: Text(signInResult),
                                 action: SnackBarAction(
                                   label: 'OK',

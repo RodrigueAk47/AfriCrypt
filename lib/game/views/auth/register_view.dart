@@ -55,23 +55,23 @@ class _RegisterAuthState extends State<RegisterAuth> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(8.0), // Add padding to make the text look better
+                      padding: const EdgeInsets.all(8.0), 
                       decoration: BoxDecoration(
-                        color: globalColor, // This is the background color
-                        borderRadius: BorderRadius.circular(15), // This makes the corners rounded
+                        color: globalColor, 
+                        borderRadius: BorderRadius.circular(15), 
                       ),
                       child: const Text(
                         'S\'enregistrer',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,
-                          fontWeight: FontWeight.bold,// This is the color of the text
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     const SizedBox(height: 100),
                     TextFieldGame(
-                      hintText: 'Votre addresse mail',
+                      hintText: 'Votre adresse e-mail',
                       controller: emailController,
                     ),
                     const SizedBox(height: 25),

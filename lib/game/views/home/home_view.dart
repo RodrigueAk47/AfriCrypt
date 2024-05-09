@@ -129,9 +129,7 @@ class _HomeState extends State<Home> {
                       right: BorderSide(width: 5, color: globalColor)),
                 ),
                 child: Card(
-
                   elevation: 4,
-
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: FutureBuilder(
@@ -249,7 +247,7 @@ class _HomeState extends State<Home> {
                                   return HomeCard(
                                       enabled: isUnlocked,
                                       img:
-                                          "assets/images/data/saison${season.id}.png",
+                                          "assets/saisons/saison_${season.id}/saison_${season.id}.jpg",
                                       numSeason: season.id,
                                       title: season.title,
                                       onPressCard: () {

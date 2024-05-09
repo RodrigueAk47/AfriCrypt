@@ -26,7 +26,7 @@ class NotificationModel {
   }
 
   static Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print('A bg message just showed up :  ${message.messageId}');
+    
   }
 
   static void configureFirebaseListeners() {
@@ -56,7 +56,6 @@ class NotificationModel {
       AndroidNotification? android = message.notification?.android;
 
       if (notification != null && android != null && defaultTargetPlatform == TargetPlatform.android) {
-        print('Message title: ${notification.title}, body: ${notification.body}');
         NotificationModel.showNotification(notification);
       }
     });

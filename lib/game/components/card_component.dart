@@ -30,10 +30,11 @@ class HomeCard extends StatelessWidget {
         margin: const EdgeInsets.only(left: 13, right: 13),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            border: Border(left: BorderSide(width: 5, color: globalColor), bottom: BorderSide(width: 5, color: globalColor))),
+            border: Border(
+                left: BorderSide(width: 5, color: globalColor),
+                bottom: BorderSide(width: 5, color: globalColor))),
         width: 380,
         child: Card(
-
           elevation: 4,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,13 +149,13 @@ class SeasonCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(description),
+              Text("                $description"),
               const SizedBox(
                 height: 10,
               ),
               ButtonOne(
                   enabled: enabled,
-                  title: 'Start',
+                  title: 'Go..',
                   onButtonPressed: () {
                     enabled
                         ? Navigator.push(

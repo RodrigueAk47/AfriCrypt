@@ -99,7 +99,6 @@ class _LoginViewState extends State<LoginView> {
                         PlayerModel(name: enteredName, gender: isGender);
                     await player.saveToSharedPreferences();
                     PlayerModel.saveUserFirestores();
-
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

@@ -83,8 +83,9 @@ class _GamePlayState extends State<GamePlay>
     var screenHeigh = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.game.title),
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
               tooltip: 'Aide',
@@ -113,120 +114,125 @@ class _GamePlayState extends State<GamePlay>
               ))
         ],
       ),
-      body: ListView(
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              return Card(
-                margin: screenWidth > 600
-                    ? EdgeInsets.only(
-                        left: screenWidth * 0.3,
-                        right: screenWidth * 0.3,
-                        bottom: 25)
-                    : const EdgeInsets.only(
-                        left: 20, right: 20, top: 5, bottom: 10),
-                elevation: 5,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(widget.game.enigme,
-                          style: const TextStyle(fontSize: 15)),
-                    ),
-                    ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/saisons/saison_2/bg.jpg'),
+                fit: BoxFit.cover)),
+        child: ListView(
+          children: [
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Card(
+                  color: Colors.white,
+                  margin: screenWidth > 600
+                      ? EdgeInsets.only(
+                          left: screenWidth * 0.3,
+                          right: screenWidth * 0.3,
+                          bottom: 25)
+                      : const EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 10),
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(widget.game.enigme,
+                            style: const TextStyle(fontSize: 15)),
                       ),
-                      child: Image(
-                        image: AssetImage(
-                            'assets/saisons/saison_${widget.season.id}/enigme_${widget.episode.id}.jpg'),
-                        width: constraints.maxWidth,
-                        height: screenWidth > 600
-                            ? screenHeigh * 0.5
-                            : null, // This will make the image take the full width of the Card
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                        child: Image(
+                          image: AssetImage(
+                              'assets/saisons/saison_${widget.season.id}/enigme_${widget.episode.id}.jpg'),
+                          width: constraints.maxWidth,
+                          height: screenWidth > 600 ? screenHeigh * 0.5 : null,
+                        ),
                       ),
-                    ),
-                    // Rest of your children here
-                  ],
-                ),
-              );
-            },
-          ),
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 10,
-            ),
-            height: 55,
-            color: Colors.black26,
-            child: AnimatedBuilder(
-              animation: _animation!,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(_animation!.value, 0),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: selectedWords.map((letter) {
-                      int originalIdx =
-                          selectedIndices[selectedWords.indexOf(letter)];
-
-                      return SelectedGame(
-                          letter: letter,
-                          onTap: () {
-                            selectedWords.remove(letter);
-                            selectedIndices.remove(originalIdx);
-                            setState(() {});
-                          });
-                    }).toList(),
+                    ],
                   ),
                 );
               },
             ),
-          ),
-          Wrap(
-            alignment: WrapAlignment.center,
-            // Define the variable 'letters'
-            children: widget.randletters.asMap().entries.map((entry) {
-              int idx = entry.key;
-              String word = entry.value;
-              return TextGame(
-                isSelect: selectedIndices.contains(idx),
-                letter: word,
-                onTap: () {
-                  setState(() {
-                    if (selectedIndices.contains(idx)) {
-                      selectedIndices.remove(idx);
-                      selectedWords.remove(word);
-                    } else {
-                      selectedIndices.add(idx);
-                      selectedWords.add(word);
-                    }
-                  });
+            Container(
+              margin: const EdgeInsets.only(
+                bottom: 10,
+              ),
+              height: 55,
+              color: Colors.black26,
+              child: AnimatedBuilder(
+                animation: _animation!,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(_animation!.value, 0),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: selectedWords.map((letter) {
+                        int originalIdx =
+                            selectedIndices[selectedWords.indexOf(letter)];
+
+                        return SelectedGame(
+                            letter: letter,
+                            onTap: () {
+                              selectedWords.remove(letter);
+                              selectedIndices.remove(originalIdx);
+                              setState(() {});
+                            });
+                      }).toList(),
+                    ),
+                  );
                 },
-              );
-            }).toList(),
-          ),
-          Container(
-              margin: const EdgeInsets.only(top: 25, bottom: 25),
-              child: ButtonOne(
-                  title: 'Valider',
-                  onButtonPressed: () async {
-                    if (selectedWords.join() == widget.game.words.join()) {
-                      setState(() {
-                        showSuccessDialog(context, 'Felicitation',
-                            widget.season, widget.episode, widget.lenght);
-                      });
-                    } else {
-                      _controller?.reset();
-                      _controller?.forward();
-                      await Future.delayed(const Duration(milliseconds: 1000));
-                      setState(() {
-                        selectedWords = [];
-                        selectedIndices = [];
-                      });
-                    }
-                  }))
-        ],
+              ),
+            ),
+            Wrap(
+              alignment: WrapAlignment.center,
+              // Define the variable 'letters'
+              children: widget.randletters.asMap().entries.map((entry) {
+                int idx = entry.key;
+                String word = entry.value;
+                return TextGame(
+                  isSelect: selectedIndices.contains(idx),
+                  letter: word,
+                  onTap: () {
+                    setState(() {
+                      if (selectedIndices.contains(idx)) {
+                        selectedIndices.remove(idx);
+                        selectedWords.remove(word);
+                      } else {
+                        selectedIndices.add(idx);
+                        selectedWords.add(word);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+            Container(
+                margin: const EdgeInsets.only(top: 25, bottom: 25),
+                child: ButtonOne(
+                    title: 'Valider',
+                    onButtonPressed: () async {
+                      if (selectedWords.join() == widget.game.words.join()) {
+                        setState(() {
+                          showSuccessDialog(context, 'Félicitations !',
+                              widget.season, widget.episode, widget.lenght);
+                        });
+                      } else {
+                        _controller?.reset();
+                        _controller?.forward();
+                        await Future.delayed(
+                            const Duration(milliseconds: 1000));
+                        setState(() {
+                          selectedWords = [];
+                          selectedIndices = [];
+                        });
+                      }
+                    }))
+          ],
+        ),
       ),
     );
   }

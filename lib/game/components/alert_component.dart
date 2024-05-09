@@ -176,7 +176,7 @@ void popUpHint(
           title: Text(title),
           content: TextButton(
               onPressed: () async {
-                print(paid);
+               
                 if (paid) {
                   setState(() {
                     show = true;
@@ -196,7 +196,7 @@ void popUpHint(
                       onShowChange(true);
                       show = true;
                     });
-                    print('c\'est fait');
+                    
                   } else {
                     setState(() {
                       load = false;

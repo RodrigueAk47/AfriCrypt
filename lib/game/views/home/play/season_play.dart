@@ -1,5 +1,5 @@
-
 import 'package:africrypt/game/components/card_component.dart';
+import 'package:africrypt/game/components/wrap_text_component.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
@@ -54,87 +54,82 @@ class _SeasonPlayState extends State<SeasonPlay> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/saisons/saison_${widget.season.id}/saison.png'), fit: BoxFit.cover)
-        ),
-        child: Column(
+            image: DecorationImage(
+                image: AssetImage(
+                    'assets/saisons/saison_${widget.season.id}/saison.png'),
+                fit: BoxFit.cover)),
+        child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 35, left: 35, right: 35),
               child: Column(
                 children: [
                   Container(
-
                     decoration: BoxDecoration(
-
                       borderRadius: BorderRadius.circular(16),
                       border: Border(
-                          left: BorderSide(width: 5, color: globalColor),
-                          bottom: BorderSide(width: 5, color: globalColor),),
-
+                        left: BorderSide(width: 5, color: globalColor),
+                        bottom: BorderSide(width: 5, color: globalColor),
+                      ),
                     ),
                     child: Container(
-
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       margin: const EdgeInsets.all(8),
                       padding: const EdgeInsets.all(9),
-
                       child: Text(
                         textAlign: TextAlign.center,
                         widget.season.description,
-                        style:  TextStyle(
-                            fontSize: 35, fontWeight: FontWeight.bold, color: globalColor),
+                        style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: globalColor),
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  Text(
-                    lastUnlockedEpisodeNumber == null
+                  WrapText(
+                    text: lastUnlockedEpisodeNumber == null
                         ? 'Loading...'
                         : '$lastUnlockedEpisodeNumber completé sur ${widget.season.episodes.length}',
-                    textAlign: TextAlign.center,
-                    style:  const TextStyle(fontSize: 17, color: Colors.black, backgroundColor: Colors.white),
+                    size: 13,
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.season.episodes.length,
-                itemBuilder: (context, index) {
-                  final episode = widget.season.episodes[index];
-                  return FutureBuilder<bool>(
-                    future: Episode.isEpisodeUnlocked(
-                        widget.season.id, widget.season.episodes[index].id),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator(); // Show a loading spinner while waiting
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            'Error: ${snapshot.error}'); // Show an error message if something went wrong
-                      } else if (snapshot.hasData) {
-                        bool isUnlocked = snapshot.data ?? false;
-                        return SeasonCard(
-                          length: widget.lenght,
-                          episode: episode,
-                          id: episode.id,
-                          title: episode.title,
-                          description: episode.description,
-                          season: widget.season,
-                          enabled: isUnlocked,
-                        );
-                      } else {
-                        return const SizedBox
-                            .shrink(); // Return an empty widget if no data
-                      }
-                    },
-                  );
-                },
-              ),
+            Column(
+              children: widget.season.episodes.map((episode) {
+                return FutureBuilder<bool>(
+                  future:
+                      Episode.isEpisodeUnlocked(widget.season.id, episode.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          'Error: ${snapshot.error}'); 
+                    } else if (snapshot.hasData) {
+                      bool isUnlocked = snapshot.data ?? false;
+                      return SeasonCard(
+                        length: widget.lenght,
+                        episode: episode,
+                        id: episode.id,
+                        title: episode.title,
+                        description: episode.description,
+                        season: widget.season,
+                        enabled: isUnlocked,
+                      );
+                    } else {
+                      return const SizedBox
+                          .shrink(); 
+                    }
+                  },
+                );
+              }).toList(),
             )
           ],
         ),

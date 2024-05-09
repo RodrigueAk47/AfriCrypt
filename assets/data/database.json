@@ -2,27 +2,27 @@
     "saison": [
         {
             "numero": 1,
-            "titre": "Le court",
-            "description": "Au coeur des pyramides",
+            "titre": "Côte d'Ivoire",
+            "description": "Traversée Ivoirienne : De Grand-Bassam à Yamoussoukro",
             "episodes": [
                 {
                     "numero": 1,
-                    "titre": "Moussa Le Guerrier",
-                    "description": "Vivez un epope de ouf",
+                    "titre": "Prologue",
+                    "description": "A la decouverte de nos Héros",
                     "stories": 
                         {
                            
                             "jeu": 
                                 {
-                                    "titre": "Qui suis je ?",
-                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                    "indice": "C'est le dernier roi d'egypte",
+                                    "titre": "4 Images un mot",
+                                    "enigme": "",
+                                    "indice": "C'est l'une des 7 merveilles du monde",
                                     "mots": [
                                         "G",
-                                        "E",
-                                        "N",
                                         "I",
-                                        "E"
+                                        "Z",
+                                        "E",
+                                        "H"
                                     ]
                                 }
                             
@@ -55,12 +55,44 @@
         },
         {
             "numero": 2,
-            "titre": "La fin",
-            "description": "Vivez un epope de ouf",
+            "titre": "Egypte",
+            "description": "Au coeur des pyramides",
             "episodes": [
                 {
                     "numero": 1,
-                    "titre": "Moussa Le Guerrier",
+                    "titre": "Prologue",
+                    "description": "Vivez un epope de ouf",
+                    "stories": 
+                        {
+                            
+                            "jeu": 
+                                {
+                                    "titre": "Qui suis je ?",
+                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
+                                    "indice": "C'est le dernier roi d'egypte",
+                                    "mots": [
+                                        "1",
+                                        "1",
+                                        "1",
+                                        "3"
+                                        
+                            
+                                    ]
+                                }
+                            
+                        }
+                    
+                }
+            ]
+        }, 
+        {
+            "numero": 3,
+            "titre": "Éthiopie",
+            "description": "Riche d'une culture ancestrale",
+            "episodes": [
+                {
+                    "numero": 1,
+                    "titre": "Prologue",
                     "description": "Vivez un epope de ouf",
                     "stories": 
                         {
