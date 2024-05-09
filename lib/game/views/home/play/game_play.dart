@@ -140,8 +140,7 @@ class _GamePlayState extends State<GamePlay>
                       ),
                       child: Image(
                         image: AssetImage(
-                            'assets/saisons/saison_${widget.season.id}/enigme_${widget.episode.id}.png'),
-                        // Replace with your image
+                            'assets/saisons/saison_${widget.season.id}/enigme_${widget.episode.id}.jpg'),
                         width: constraints.maxWidth,
                         height: screenWidth > 600
                             ? screenHeigh * 0.5
