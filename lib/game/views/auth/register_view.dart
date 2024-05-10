@@ -19,7 +19,6 @@ class _RegisterAuthState extends State<RegisterAuth> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -30,35 +29,34 @@ class _RegisterAuthState extends State<RegisterAuth> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0.0,
-
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/saisons/saison_1/saison.png'),
+                image: AssetImage(
+                    'assets/images/main_${responsive<String>(context, 'desktop', 'android')}.jpg'),
                 fit: BoxFit.cover)),
         child: Container(
           margin: screenWidth > 800
               ? EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.2,
-              right: MediaQuery.of(context).size.width * 0.2,
-              top: 25,
-              bottom: 20)
-              : const EdgeInsets.only(
-              left: 10, right: 10, top: 20, bottom: 20),
+                  left: MediaQuery.of(context).size.width * 0.2,
+                  right: MediaQuery.of(context).size.width * 0.2,
+                  top: 25,
+                  bottom: 20)
+              : const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
           padding: const EdgeInsets.all(8.0),
           child: Padding(
-            padding:  EdgeInsets.only(top: responsive<double>(context, 130, 70)),
+            padding: EdgeInsets.only(top: responsive<double>(context, 130, 70)),
             child: ListView(
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8.0), 
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: globalColor, 
-                        borderRadius: BorderRadius.circular(15), 
+                        color: globalColor,
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: const Text(
                         'S\'enregistrer',
@@ -116,7 +114,8 @@ class _RegisterAuthState extends State<RegisterAuth> {
                           }
 
                           String? errorMessage =
-                          (await PlayerModel.signUpWithEmail(email, password));
+                              (await PlayerModel.signUpWithEmail(
+                                  email, password));
                           if (errorMessage != null) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: globalColor,

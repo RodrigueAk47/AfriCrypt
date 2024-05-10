@@ -39,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
                 bottomRight: Radius.circular(25),
               ),
               child: Image.asset(
-                'assets/images/${responsive<String>(context, 'saison1', 'welcome')}.png',
+                'assets/images/${responsive<String>(context, 'welcome_desktop', 'welcome_mobile')}.png',
                 height: screenWidth > 800 ? 450 : null,
               ),
             ),
@@ -93,10 +93,10 @@ class _LoginViewState extends State<LoginView> {
             child: ButtonOne(
                 title: 'Commencer le jeu',
                 onButtonPressed: () async {
-                  final enteredName = nameController.text.trim().capitalize();
+                  final String enteredName = nameController.text.trim();
                   if (enteredName.isNotEmpty && enteredName.length > 2) {
-                    PlayerModel player =
-                        PlayerModel(name: enteredName, gender: isGender);
+                    PlayerModel player = PlayerModel(
+                        name: enteredName.capitalize(), gender: isGender);
                     await player.saveToSharedPreferences();
                     PlayerModel.saveUserFirestores();
                     Navigator.pushReplacement(
@@ -106,7 +106,14 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     );
                   } else {
-                    showErrorDialog(context, 'Entrer un pseudo correct');
+                    popUp(
+                        context,
+                        'Le pseudo doit avoir au moins deux caractères.',
+                        'Verifie ton pseudo',
+                        'ok',
+                        Icons.error, () {
+                      Navigator.pop(context);
+                    });
                   }
                 }),
           ),

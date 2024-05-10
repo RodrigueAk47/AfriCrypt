@@ -27,23 +27,24 @@ class _HomeState extends State<Home> {
     Season.getLastUnlockedSeason().then((id) {
       setState(() {
         lastUnlockedSeasonNumber = id;
-        stopPage = id - 1;
+        stopPage = id;
+        print(stopPage);
+        print(lastUnlockedSeasonNumber);
       });
     });
 
     _controller = PageController(initialPage: 0, viewportFraction: 1);
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_controller.hasClients) {
         if (_controller.page!.round() == _controller.page) {
           if (_controller.page! < _controller.position.maxScrollExtent &&
-              _controller.page! < stopPage) {
+              _controller.page! < stopPage - 1) {
             _controller.nextPage(
-              duration: const Duration(seconds: 3),
+              duration: const Duration(seconds: 2),
               curve: Curves.easeInOut,
             );
-            _timer.cancel();
           } else {
-            _timer.cancel(); // Arrête l'animation
+            _timer.cancel();
           }
         }
       }

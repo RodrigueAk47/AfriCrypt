@@ -28,9 +28,10 @@ class _SignInState extends State<SignIn> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/main.jpg'),
+                image: AssetImage(
+                    'assets/images/main_${responsive<String>(context, 'desktop', 'android')}.jpg'),
                 fit: BoxFit.cover)),
         child: Container(
           margin: screenWidth > 800
@@ -68,7 +69,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     const SizedBox(height: 100),
                     TextFieldGame(
-                        hintText: 'Votre addresse mail',
+                        hintText: 'Votre adresse e-mail',
                         controller: emailController),
                     const SizedBox(height: 25),
                     TextFieldGame(

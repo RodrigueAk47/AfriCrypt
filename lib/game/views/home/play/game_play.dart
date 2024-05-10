@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:africrypt/Models/player_model.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
 import 'package:africrypt/main.dart';
@@ -125,13 +126,23 @@ class _GamePlayState extends State<GamePlay>
               builder: (context, constraints) {
                 return Card(
                   color: Colors.white,
-                  margin: screenWidth > 600
+                  margin: responsive<EdgeInsetsGeometry>(
+                      context,
+                      EdgeInsets.only(
+                          left: screenWidth * 0.3,
+                          right: screenWidth * 0.3,
+                          bottom: 25),
+                      const EdgeInsets.only(
+                          left: 20, right: 20, top: 5, bottom: 10))
+
+                  /*screenWidth > 600
                       ? EdgeInsets.only(
                           left: screenWidth * 0.3,
                           right: screenWidth * 0.3,
                           bottom: 25)
                       : const EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 10),
+                          left: 20, right: 20, top: 5, bottom: 10)*/
+                  ,
                   elevation: 5,
                   child: Column(
                     children: [
