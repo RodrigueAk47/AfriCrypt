@@ -32,7 +32,7 @@ flutter:
   assets:
     - assets/saisons/saison_1/
     - assets/saisons/saison_2/
-    - assets/images/test/winner.png
+    - assets/saisons/saison_3/
     - assets/music/
     - assets/logo/
     - assets/images/perso/

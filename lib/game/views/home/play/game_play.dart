@@ -4,7 +4,6 @@ import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/components/button_component.dart';
 import 'package:africrypt/game/components/gameplay_component.dart';
-import 'package:africrypt/main.dart';
 import 'package:africrypt/models/episodes_model.dart';
 import 'package:africrypt/models/game_model.dart';
 import 'package:africrypt/models/season_model.dart';
@@ -109,9 +108,9 @@ class _GamePlayState extends State<GamePlay>
                   },
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.help_rounded,
-                color: globalColor,
+                color: Colors.white,
               ))
         ],
       ),

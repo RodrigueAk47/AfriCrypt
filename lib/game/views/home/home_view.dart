@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
       decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage(
-                  'assets/saisons/saison_$lastUnlockedSeasonNumber/saison.png'),
+                  'assets/saisons/saison_$lastUnlockedSeasonNumber/saison.jpg'),
               fit: BoxFit.cover)),
       child: Stack(children: [
         Positioned(
