@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:africrypt/Models/audio_service_model.dart';
 import 'package:africrypt/Models/game_model.dart';
 import 'package:africrypt/Models/player_model.dart';
 import 'package:africrypt/core/theme.dart';
@@ -13,23 +14,23 @@ import 'package:confetti/confetti.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
-
 showSuccessDialog(BuildContext context, String successMessage, Season season,
     Episode episode, int lenght) {
   ConfettiController controller =
       ConfettiController(duration: const Duration(seconds: 5));
   controller.play();
+  AudioServiceModel().playSuccessSound();
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (context) {
       return AlertDialog(
+        alignment: Alignment.center,
         backgroundColor: GameTheme.secondaryColor,
         title: Center(child: Text(successMessage)),
         content: ConfettiWidget(
           confettiController: controller,
           blastDirection: -pi / 3,
-          // radial value - UP
           maxBlastForce: 60,
           minBlastForce: 1,
           emissionFrequency: 0.03,
@@ -53,8 +54,7 @@ showSuccessDialog(BuildContext context, String successMessage, Season season,
               title: 'Suivant!  ',
               onButtonPressed: () async {
                 Episode.saveLastUnlockedEpisode(season.id, episode.id);
-                if (
-                    FirebaseAuth.instance.currentUser != null) {
+                if (FirebaseAuth.instance.currentUser != null) {
                   Episode.saveLastUnlockedEpisodeOnFirebase(
                       season.id, episode.id);
                 }
@@ -156,7 +156,6 @@ void popUpHint(
           title: Text(title),
           content: TextButton(
               onPressed: () async {
-               
                 if (paid) {
                   setState(() {
                     show = true;
@@ -176,7 +175,6 @@ void popUpHint(
                       onShowChange(true);
                       show = true;
                     });
-                    
                   } else {
                     setState(() {
                       load = false;
@@ -232,7 +230,9 @@ void popUpHint(
 }
 
 void showSeasonUnlock(BuildContext context, String message, String title) {
+  AudioServiceModel().updateCurrentAudioSource();
   showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

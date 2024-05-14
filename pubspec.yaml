@@ -19,6 +19,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   firebase_messaging: ^14.9.1
   flutter_local_notifications: ^17.1.1
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -31,11 +32,10 @@ flutter:
   assets:
     - assets/saisons/saison_1/
     - assets/saisons/saison_2/
-    - assets/saisons/saison_3/
+    - assets/images/test/winner.png
     - assets/music/
     - assets/logo/
     - assets/images/perso/
     - assets/data/database.json
     - assets/images/
-    - assets/images/data/
     

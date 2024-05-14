@@ -7,7 +7,7 @@ import 'package:africrypt/models/season_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class StoryPlay extends StatelessWidget {
+class StoryPlay extends StatefulWidget {
   const StoryPlay(
       {super.key,
       required this.episode,
@@ -19,6 +19,13 @@ class StoryPlay extends StatelessWidget {
   final int lenght;
 
   @override
+  State<StoryPlay> createState() => _StoryPlayState();
+}
+
+class _StoryPlayState extends State<StoryPlay> {
+  bool loading = false;
+
+  @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -27,9 +34,10 @@ class StoryPlay extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/saisons/saison_2/bg.jpg'),
+                image: AssetImage(
+                    'assets/saisons/saison_${widget.season.id}/bg.jpg'),
                 fit: BoxFit.cover)),
         child: Column(
           children: [
@@ -45,7 +53,7 @@ class StoryPlay extends StatelessWidget {
                       )
                     : const EdgeInsets.all(0),
                 child: SfPdfViewer.asset(
-                    'assets/saisons/saison_${season.id}/story_${episode.id}.pdf'),
+                    'assets/saisons/saison_${widget.season.id}/story_${widget.episode.id}.pdf'),
               ),
             ),
             Container(
@@ -55,22 +63,31 @@ class StoryPlay extends StatelessWidget {
                   top: responsive<double>(context, 10, 5),
                   bottom: responsive<double>(context, 10, 5)),
               child: ButtonOne(
+                  loading: loading,
                   title: 'Jouer',
                   onButtonPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GamePlay(
-                                  lenght: lenght,
-                                  episode: episode,
-                                  season: season,
-                                  game: episode.stories.game,
-                                  randletters: randomizewords(List.from(
-                                    episode.stories.game.words,
-                                  )),
-                                )));
+                    setState(() {
+                      loading = true;
+                    });
+                    Future.delayed(const Duration(seconds: 4), () {
+                      setState(() {
+                        loading = false;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GamePlay(
+                                    lenght: widget.lenght,
+                                    episode: widget.episode,
+                                    season: widget.season,
+                                    game: widget.episode.stories.game,
+                                    randletters: randomizewords(List.from(
+                                      widget.episode.stories.game.words,
+                                    )),
+                                  )));
+                    });
                   }),
-            ), // Button added here
+            ),
           ],
         ),
       ),

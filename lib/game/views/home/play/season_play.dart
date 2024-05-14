@@ -18,6 +18,9 @@ class SeasonPlay extends StatefulWidget {
 
 class _SeasonPlayState extends State<SeasonPlay> {
   int? lastUnlockedEpisodeNumber;
+  bool isCompleted(Episode episode) {
+    return episode.id <= lastUnlockedEpisodeNumber!;
+  }
 
   @override
   void initState() {
@@ -38,11 +41,8 @@ class _SeasonPlayState extends State<SeasonPlay> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Custom behavior here
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        const Dashboard())); // This will navigate back to the previous route
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Dashboard()));
           },
         ),
         title: Text(
@@ -93,6 +93,7 @@ class _SeasonPlayState extends State<SeasonPlay> {
                     height: 8,
                   ),
                   WrapText(
+                    fontWeights: FontWeight.bold,
                     text: lastUnlockedEpisodeNumber == null
                         ? 'Loading...'
                         : '$lastUnlockedEpisodeNumber completé sur ${widget.season.episodes.length}',
@@ -110,8 +111,7 @@ class _SeasonPlayState extends State<SeasonPlay> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text(
-                          'Error: ${snapshot.error}'); 
+                      return Text('Error: ${snapshot.error}');
                     } else if (snapshot.hasData) {
                       bool isUnlocked = snapshot.data ?? false;
                       return SeasonCard(
@@ -119,13 +119,12 @@ class _SeasonPlayState extends State<SeasonPlay> {
                         episode: episode,
                         id: episode.id,
                         title: episode.title,
-                        description: episode.description,
                         season: widget.season,
                         enabled: isUnlocked,
+                        isCompleted: isCompleted(episode),
                       );
                     } else {
-                      return const SizedBox
-                          .shrink(); 
+                      return const SizedBox.shrink();
                     }
                   },
                 );

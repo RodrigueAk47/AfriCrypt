@@ -116,9 +116,10 @@ class _GamePlayState extends State<GamePlay>
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/saisons/saison_2/bg.jpg'),
+                image: AssetImage(
+                    'assets/saisons/saison_${widget.season.id}/bg.jpg'),
                 fit: BoxFit.cover)),
         child: ListView(
           children: [
@@ -133,16 +134,7 @@ class _GamePlayState extends State<GamePlay>
                           right: screenWidth * 0.3,
                           bottom: 25),
                       const EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 10))
-
-                  /*screenWidth > 600
-                      ? EdgeInsets.only(
-                          left: screenWidth * 0.3,
-                          right: screenWidth * 0.3,
-                          bottom: 25)
-                      : const EdgeInsets.only(
-                          left: 20, right: 20, top: 5, bottom: 10)*/
-                  ,
+                          left: 20, right: 20, top: 5, bottom: 10)),
                   elevation: 5,
                   child: Column(
                     children: [

@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:africrypt/Models/player_model.dart';
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/game/views/auth/signin_view.dart';
 import 'package:africrypt/game/views/dashboard_view.dart';
 import 'package:africrypt/main.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -62,34 +64,54 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Africrypt',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 60),
-            AnimatedCrossFade(
-              duration: const Duration(seconds: 1),
-              secondChild:
-                  Image.asset('assets/logo/logo.png', width: 150, height: 150),
-              firstChild: Image.asset('assets/logo/genuis-game.png',
-                  width: 150, height: 150),
-              crossFadeState: _showFirstImage
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-            ),
-            const SizedBox(height: 25),
-            const Text('Powered by Genuis Game',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Padding(
-              padding: const EdgeInsets.all(60),
-              child: LinearProgressIndicator(
-                borderRadius: BorderRadius.circular(3),
-                color: globalColor,
-                value: _controller.value,
+        child: Container(
+          decoration:  BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/main_${responsive<String>(context, 'desktop', 'android')}.jpg'),
+                  fit: BoxFit.cover)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+              AnimatedCrossFade(
+                duration: const Duration(seconds: 1),
+                secondChild: Image.asset('assets/logo/logo.png',
+                    width: 150, height: 150),
+                firstChild: Image.asset('assets/logo/genuis-game.png',
+                    width: 150, height: 150),
+                crossFadeState: _showFirstImage
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Powered by',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                  AnimatedTextKit(isRepeatingAnimation: false, animatedTexts: [
+                    TyperAnimatedText(' Genuis Game',
+                        speed: const Duration(milliseconds: 150),
+                        textStyle: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white))
+                  ]),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(60),
+                child: LinearProgressIndicator(
+                  borderRadius: BorderRadius.circular(3),
+                  color: globalColor,
+                  value: _controller.value,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

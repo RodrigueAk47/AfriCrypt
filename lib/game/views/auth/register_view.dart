@@ -67,12 +67,11 @@ class _RegisterAuthState extends State<RegisterAuth> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 70),
                     TextFieldGame(
                       hintText: 'Votre adresse e-mail',
                       controller: emailController,
                     ),
-                    const SizedBox(height: 25),
                     TextFieldGame(
                       obscurText: true,
                       hintText: 'Votre mot de passe',

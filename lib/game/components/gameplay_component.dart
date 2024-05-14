@@ -1,3 +1,4 @@
+import 'package:africrypt/features/string_feature.dart';
 import 'package:africrypt/main.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,8 @@ class TextGame extends StatelessWidget {
     return TextButton(
         onPressed: onTap,
         child: Container(
-            width: 55,
-            height: 55,
+            width: responsive<double>(context, 50, 40),
+            height: responsive<double>(context, 50, 40),
             margin: const EdgeInsets.only(top: 15),
             decoration: BoxDecoration(
                 color: (isSelect) ? globalColor : Colors.white,
@@ -27,7 +28,7 @@ class TextGame extends StatelessWidget {
               child: Text(
                 letter,
                 style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 26,
                     fontWeight: FontWeight.w900,
                     color: (isSelect) ? Colors.white : Colors.blue),
               ),

@@ -79,24 +79,18 @@ class _ProfileState extends State<Profile> {
                 fontWeights: FontWeight.bold,
               ),
               const SizedBox(height: 20),
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(
-                      right: responsive<double>(context, 250, 5),
-                      left: responsive<double>(context, 250, 5)),
-                  decoration: const BoxDecoration(color: Colors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.monetization_on, color: globalColor),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Solde : ${player?.coins}',
-                        style: const TextStyle(fontSize: 19),
-                      ),
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.paid,
+                    color: Colors.white,
                   ),
-                ),
+                  WrapText(
+                    text: 'Solde : ${player?.coins}',
+                    size: 19,
+                  ),
+                ],
               ),
               if (defaultTargetPlatform == TargetPlatform.android &&
                   user != null &&

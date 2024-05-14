@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Episode {
   final int id;
   final String title;
-  final String description;
   final Story stories;
 
   bool? isUnlocked;
@@ -14,7 +13,6 @@ class Episode {
   Episode({
     required this.id,
     required this.title,
-    required this.description,
     required this.stories,
     this.isUnlocked = false,
   });
@@ -25,7 +23,6 @@ class Episode {
     return Episode(
       id: json['numero'],
       title: json['titre'],
-      description: json['description'],
 
       stories: Story.fromJson(json['stories']),
     );

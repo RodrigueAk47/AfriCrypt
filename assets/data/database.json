@@ -8,21 +8,16 @@
                 {
                     "numero": 1,
                     "titre": "Prologue",
-                    "description": "A la decouverte de nos Héros",
                     "stories": 
                         {
                            
                             "jeu": 
                                 {
-                                    "titre": "4 Images un mot",
+                                    "titre": "4 Images 1 mot",
                                     "enigme": "",
-                                    "indice": "C'est l'une des 7 merveilles du monde",
+                                    "indice": "dignitaire chargé d'administrer un territoire.",
                                     "mots": [
-                                        "G",
-                                        "I",
-                                        "Z",
-                                        "E",
-                                        "H"
+                                        "G", "O","U","V","E","R","N", "E","U","R"
                                     ]
                                 }
                             
@@ -31,26 +26,81 @@
                 },
                 {
                     "numero": 2,
-                    "titre": "Moussa a l'aventure",
-                    "description": "Vivez un epope de ouf",
+                    "titre": "En route pour Yamousoukro",
                     "stories": 
                         {
                             
                             "jeu": 
                                 {
-                                    "titre": "Qui suis je ?",
-                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
+                                    "titre": "Selection",
+                                    "enigme": "",
+                                    "indice": "",
+                                    "mots": [
+                                        "2"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 3,
+                    "titre": "Perdu dans les souvenirs",
+                    "stories": 
+                        {
+                           
+                            "jeu": 
+                                {
+                                    "titre": "Classement",
+                                    "enigme": "",
+                                    "indice": "Tu t'es fait berné mdr !",
+                                    "mots": [
+                                        "3","4","1","2"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 4,
+                    "titre": "Direction les montagnes",
+                    "stories": 
+                        {
+                            "jeu": 
+                                {
+                                    "titre": "Choix",
+                                    "enigme": "",
                                     "indice": "C'est le dernier roi d'egypte",
                                     "mots": [
-                                        "G",
-                                        "E",
-                                        "N"
+                                        "3"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 5,
+                    "titre": "Vers la fin du voyage",
+                    "stories": 
+                        {
+                            
+                            "jeu": 
+                                {
+                                    "titre": "CAN",
+                                    "enigme": "",
+                                    "indice": "Guinée Equatoriale",
+                                    "mots": [
+                                        "E","M","I","L","I","O"," ","N","S","U","E"
+
                                     ]
                                 }
                             
                         }
                     
                 }
+
             ]
         },
         {
@@ -61,52 +111,54 @@
                 {
                     "numero": 1,
                     "titre": "Prologue",
-                    "description": "Vivez un epope de ouf",
                     "stories": 
                         {
                             
                             "jeu": 
                                 {
-                                    "titre": "Qui suis je ?",
-                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                    "indice": "C'est le dernier roi d'egypte",
+                                    "titre": "4 Images un mot",
+                                    "enigme": "",
+                                    "indice": "C'est l'une des sept merveilles du monde antique",
                                     "mots": [
-                                        "1",
-                                        "1",
-                                        "1",
-                                        "3"
-                                        
-                            
+                                        "G","I","Z","E","H"
                                     ]
                                 }
                             
                         }
                     
-                }
-            ]
-        }, 
-        {
-            "numero": 3,
-            "titre": "Éthiopie",
-            "description": "Riche d'une culture ancestrale",
-            "episodes": [
+                },
                 {
-                    "numero": 1,
-                    "titre": "Prologue",
-                    "description": "Vivez un epope de ouf",
+                    "numero": 2,
+                    "titre": "Une découverte suprenante",
+                    "stories": 
+                        {
+                           
+                            "jeu": 
+                                {
+                                    "titre": "Enigme",
+                                    "enigme": "",
+                                    "indice": "Cette grande figure historique a régné sur l'Egypte ancienne.",
+                                    "mots": [
+                                        "C", "L","E","O","P","A","T","R","E"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 3,
+                    "titre": "les secret cachés",
                     "stories": 
                         {
                             
                             "jeu": 
                                 {
-                                    "titre": "Qui suis je ?",
-                                    "enigme": "Lorem is text idols jkdnkjbk dkldnldk ld,lmd ilhdihdlih dkldnldk ld,lmd,l ilhdihdlih dkldnldk ld,lmd,l ilhdihdlihilhdihdlihs ",
-                                    "indice": "C'est le dernier roi d'egypte",
+                                    "titre": "",
+                                    "enigme": "",
+                                    "indice": "Soit logique",
                                     "mots": [
-                                        "1",
-                                        "1",
-                                        "1",
-                                        "3"
+                                        "1","1","1","3"
                                         
                             
                                     ]
@@ -114,7 +166,46 @@
                             
                         }
                     
+                },
+                {
+                    "numero": 4,
+                    "titre": "La surprise",
+                    "stories": 
+                        {
+                           
+                            "jeu": 
+                                {
+                                    "titre": "Trouve",
+                                    "enigme": "",
+                                    "indice": " C'est facile, c'est le nom de l'Egypte en langue égyptienne ancienne.",
+                                    "mots": [
+                                        "K","E","M","E","T"
+                                    ]
+                                }
+                            
+                        }
+                    
+                },
+                {
+                    "numero": 5,
+                    "titre": "L'enigme finale",
+                    "stories": 
+                        {
+                            
+                            "jeu": 
+                                {
+                                    "titre": "",
+                                    "enigme": "",
+                                    "indice": "Ce fleuve est souvent considéré comme le berceau de la civilisation égyptienne et a été vénéré comme une divinité dans la culture égyptienne ancienne.",
+                                    "mots": [
+                                        "4"
+                                    ]
+                                }
+                            
+                        }
+                    
                 }
+                
             ]
         }
     ]

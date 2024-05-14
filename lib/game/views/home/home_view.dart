@@ -28,8 +28,6 @@ class _HomeState extends State<Home> {
       setState(() {
         lastUnlockedSeasonNumber = id;
         stopPage = id;
-        print(stopPage);
-        print(lastUnlockedSeasonNumber);
       });
     });
 
@@ -97,13 +95,16 @@ class _HomeState extends State<Home> {
                                 color: globalColor),
                           ),
                         ]),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.yellow,
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: Image.asset(
-                            'assets/images/perso/${player.gender == false ? 'boy' : 'girl'}.png',
-                            scale: 9,
+                        GestureDetector(
+                          onTap: () => Season.saveLastUnlockedSeason(2),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.yellow,
+                                borderRadius: BorderRadius.circular(15.0)),
+                            child: Image.asset(
+                              'assets/images/perso/${player.gender == false ? 'boy' : 'girl'}.png',
+                              scale: 9,
+                            ),
                           ),
                         ),
                       ]);
@@ -271,15 +272,14 @@ class _HomeState extends State<Home> {
                                               });
                                       });
                                 } else {
-                                  return const SizedBox
-                                      .shrink(); // Return an empty widget if no data
+                                  return const SizedBox.shrink();
                                 }
                               },
                             );
                           }),
                     );
                   } else {
-                    return const CircularProgressIndicator(); // Show a loading spinner while waiting for seasons data
+                    return const CircularProgressIndicator();
                   }
                 },
               )

@@ -87,20 +87,21 @@ class SeasonCard extends StatelessWidget {
     super.key,
     required this.id,
     required this.title,
-    required this.description,
     required this.season,
     required this.episode,
     this.enabled = false,
     required this.length,
+    this.isCompleted = false,
   });
 
   final int id;
   final String title;
-  final String description;
   final Season season;
   final Episode episode;
   final bool enabled;
   final int length;
+  final bool loading = false;
+  final bool isCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +126,7 @@ class SeasonCard extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    enabled ? Icons.play_arrow : Icons.lock,
+                    enabled ? isCompleted ? Icons.check :Icons.play_arrow : Icons.lock,
                     color: globalColor,
                     size: 45,
                   ),
@@ -149,7 +150,6 @@ class SeasonCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Text("                $description"),
               const SizedBox(
                 height: 10,
               ),

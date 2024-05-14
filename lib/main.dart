@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'package:africrypt/Models/audio_service_model.dart';
 import 'package:africrypt/Models/notification_model.dart';
 import 'package:africrypt/core/theme.dart';
-import 'package:africrypt/models/season_model.dart';
 import 'package:africrypt/splash_screen.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +16,11 @@ Color globalColor = GameTheme.colors[0];
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   GameTheme.refreshGlobalColor();
-  Season.getLastUnlockedSeason().then((value) {
-    globalColor = GameTheme.colors[value - 1];
-  });
-
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -46,30 +40,28 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> with WidgetsBindingObserver {
-  AudioPlayer audioPlayer = AudioPlayer();
-
+  final AudioServiceModel _audioService = AudioServiceModel();
 
   @override
   void initState() {
     super.initState();
-
-   NotificationModel.initNotify();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _audioService.init();
+    });
+    NotificationModel.initNotify();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    audioPlayer.dispose();
+    _audioService.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      audioPlayer.pause();
-    } else if (state == AppLifecycleState.resumed) {
-      audioPlayer.resume();
-    }
+    _audioService.didChangeAppLifecycleState(state);
   }
 
   @override

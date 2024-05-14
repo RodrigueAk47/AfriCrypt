@@ -34,13 +34,14 @@ class _SignInState extends State<SignIn> {
                     'assets/images/main_${responsive<String>(context, 'desktop', 'android')}.jpg'),
                 fit: BoxFit.cover)),
         child: Container(
-          margin: screenWidth > 800
-              ? EdgeInsets.only(
+          margin: responsive<EdgeInsets>(
+              context,
+              EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.2,
                   right: MediaQuery.of(context).size.width * 0.2,
                   top: 25,
-                  bottom: 20)
-              : const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+                  bottom: 20),
+              const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20)),
           padding: const EdgeInsets.all(8.0),
           child: Padding(
             padding: EdgeInsets.only(top: responsive<double>(context, 130, 70)),
@@ -50,28 +51,24 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(
-                          8.0), // Add padding to make the text look better
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: globalColor, // This is the background color
-                        borderRadius: BorderRadius.circular(
-                            15), // This makes the corners rounded
+                        color: globalColor,
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: const Text(
                         'Se connecter',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 30,
-                          fontWeight:
-                              FontWeight.bold, // This is the color of the text
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 70),
                     TextFieldGame(
                         hintText: 'Votre adresse e-mail',
                         controller: emailController),
-                    const SizedBox(height: 25),
                     TextFieldGame(
                       hintText: 'Votre mot de passe',
                       obscurText: true,
