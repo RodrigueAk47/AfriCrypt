@@ -19,7 +19,7 @@ class TextFieldGame extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 15),
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.black),
+          hintStyle: const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
           filled: true,
           fillColor: const Color.fromARGB(109, 255, 255, 255),
           border: const OutlineInputBorder(
